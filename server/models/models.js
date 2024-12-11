@@ -10,6 +10,21 @@ const User = sequelize.define('User', {
   password: { type: DataTypes.STRING, allowNull: false },
   delivery_address: { type: DataTypes.STRING },
   phone_number: { type: DataTypes.STRING },
+}, {
+  hooks: {
+    // Хук для назначения роли пользователя по умолчанию
+    async beforeCreate(user) {
+      // Ищем роль "customer"
+      const defaultRole = await Role.findOne({ where: { name: 'customer' } });
+      if (defaultRole) {
+        // Присваиваем роль "customer"
+        user.roleId = defaultRole.id;
+      } else {
+        // Если роль "customer" не найдена, выбрасываем ошибку
+        throw new Error('Роль "customer" не найдена');
+      }
+    }
+  }
 });
 
 const Refresh_token = sequelize.define('refresh_token', {
