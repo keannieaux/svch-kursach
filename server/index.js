@@ -3,25 +3,25 @@ const express = require('express');
 const sequelize = require('./db');
 const models = require('./models/models');
 const cors = require('cors');
-// const fileUpload = require('express-fileupload');
+const fileUpload = require('express-fileupload');
 const path = require('path');
-const router = require('./routes/index')
-const errorHandler = require('./middleware/ErrorHandlingMiddleware')
+const router = require('./routes/index');
+const errorHandler = require('./middleware/ErrorHandlingMiddleware');
+const cookieParser = require('cookie-parser');
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
 app.use(cors({
-    origin: '*', // Или укажите точный адрес клиента, если требуется
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    origin: 'http://localhost:3000',
+    credentials: true,
 }));
 app.use(express.json());
-// app.use(fileUpload({}))
+app.use(fileUpload());
+app.use(cookieParser()); // Используем cookie-parser для работы с куки
+app.use(express.static(path.resolve(__dirname, 'static')));
 app.use('/api', router);
-
-// Обработка ошибок, последний Middleware
-app.use(errorHandler)
+app.use(errorHandler); // Обработка ошибок должна идти после всех маршрутов
 
 const start = async () => {
     try {

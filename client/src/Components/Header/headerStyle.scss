@@ -1,0 +1,70 @@
+.header {
+  background: #303030; // Matches dark header background
+  height: 107px; // Fixed height
+  padding: 0 2rem; // Adjust padding for spacing
+
+  .navbar-dark {
+    background: transparent;
+  }
+
+  &__logo {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    text-decoration: none;
+    margin-right: 2rem; // Space between logo and nav
+  }
+
+  &__nav {
+    display: flex;
+    gap: 2rem; // Even spacing between nav items
+
+    .nav-link {
+      color: #fff;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: #6E4670;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem; // Space between action buttons
+
+    .icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 50%;
+      background-color: #6E4670;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+
+      img {
+        width: 1.5rem;
+        height: 1.5rem; // Adjust icon size
+      }
+
+      &:hover {
+        background-color: #5a375e;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+
+    &__actions {
+      gap: 1rem; // Adjust gap for smaller screens
+    }
+  }
+}
