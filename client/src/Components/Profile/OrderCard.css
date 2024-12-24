@@ -1,0 +1,76 @@
+.order-card {
+  display: flex;
+  gap: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s;
+  padding: 20px;
+}
+
+.order-card:hover {
+  transform: translateY(-4px);
+}
+
+.order-image {
+  width: 50%;
+  height: 300px;
+  border-radius: 12px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+.order-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 20px;
+  width: 100%;
+}
+
+.order-name {
+  font-size: 32px;
+  color: white;
+  margin: 0;
+}
+
+.order-status, .order-size {
+  font-size: 40px;
+  color: white;
+}
+.order-size p{
+  font-size: 38px;
+}
+.order-size{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.order-status p{
+  font-size: 40px;
+}
+.order-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.order-total {
+  font-size: 40px;
+  color: white;
+  font-weight: bold;
+}
+
+.order-color {
+  width: 100%;
+}

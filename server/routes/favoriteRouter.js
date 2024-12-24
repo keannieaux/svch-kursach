@@ -1,9 +1,14 @@
-const Router = require ('express')
-const favoriteController = require('../controllers/favoriteController')
-const router = new Router()
+const Router = require('express');
+const favoriteController = require('../controllers/favoriteController');
+const router = new Router();
 
-router.get('/getFavoriteByUser', favoriteController.getFavoriteByUser)
-router.post('/addfavorite', favoriteController.addFavorite)
-router.delete('/removeFavorite', favoriteController.removeFavorite)
+// Получить избранное пользователя по ID
+router.get('/users/:userId/favorites', favoriteController.getFavoriteByUser);
 
-module.exports = router
+// Добавить в избранное
+router.post('/', favoriteController.addFavorite); 
+
+// Удалить из избранного по ID
+router.delete('/users/:userId/products/:productId', favoriteController.removeFavorite); 
+
+module.exports = router;

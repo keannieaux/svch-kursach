@@ -1,0 +1,96 @@
+.inputiki {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.centiosq {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10%;
+}
+
+.inputiki input,
+.inputiki button {
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+.inputiki input,
+.inputiki textarea,
+.inputiki select,
+.inputiki button {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 100%; /* Добавляем одинаковую ширину для всех инпутов */
+}
+
+.inputiki input::placeholder,
+.inputiki textarea::placeholder {
+  color: #888;
+}
+
+.inputiki input:focus,
+.inputiki textarea:focus,
+.inputiki select:focus {
+  border-color: #fff;
+  outline: none;
+}
+
+.inputiki button {
+  background-color: #6E4670; /* Цвет кнопки */
+  cursor: pointer;
+}
+
+.inputiki button:hover {
+  background-color: #5A3B5C; /* Цвет кнопки при наведении */
+}
+
+.category-list {
+  margin-top: 20px;
+}
+
+.category-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.category-list li {
+  padding: 10px;
+  background-color: #444; /* Темный фон для списка */
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #fff; /* Белый текст */
+  border-radius: 5px; /* Радиус */
+}
+
+.category-list span {
+  font-weight: bold;
+}
+
+.error {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+@media (max-width: 1023px) {
+  .centiosq {
+    padding-top: 20%;
+  }
+
+}
+
+@media (max-width: 500px) {
+  .centiosq {
+    padding-top: 34%;
+  }
+
+}

@@ -3,18 +3,18 @@ const router = new Router();
 const roleController = require('../controllers/roleController');
 
 // Получить все роли
-router.get('/getAllRoles', roleController.getAllRoles);
+router.get('/', roleController.getAllRoles);
 
 // Создать роль
-router.post('/createRole', roleController.createRole);
+router.post('/', roleController.createRole);
 
 // Получить роль по ID
-router.get('/getRoleById/:id', roleController.getRoleById);  // Теперь ID передается через URL
+router.get('/:id', roleController.getRoleById);  
 
 // Обновить роль
-router.put('/updateRole/:id', roleController.updateRole); // Теперь ID передается через URL
+router.put('/:id', roleController.updateRole); 
 
 // Удалить роль
-router.delete('/deleteRole/:id', roleController.deleteRole); // Теперь ID передается через URL
+router.delete('/:id', roleController.deleteRole); 
 
 module.exports = router;

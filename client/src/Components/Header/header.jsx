@@ -1,62 +1,47 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Navbar, NavbarToggler, Collapse, Nav, NavItem, NavbarBrand } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './headerStyle.scss';
-import cartIcon from '../../img/basket1.svg'; // Replace with actual filename
-import profileIcon from '../../img/user1.svg'; // Replace with actual filename
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import GuestHeader from './guestheader';
+import UserHeader from './userheader';
+import AdminHeader from './adminheader';
+import { checkAuth } from '../../store/slice/authSlice';
+import './headerStyle.css';
 
-const Header = ({ userType }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const Header = () => {
+    const [isOpen, setIsOpen] = useState(false);
+    const toggle = () => setIsOpen(!isOpen);
+    const dispatch = useDispatch();
+    const { isAuth, user, isLoading } = useSelector(state => state.auth);
 
-  const toggle = () => setIsOpen(!isOpen);
+    // Добавьте соответствующие идентификаторы ролей
+    const CUSTOMER_ROLE_ID = 1; // ID роли "customer"
+    const ADMIN_ROLE_ID = 2;    // ID роли "ADMIN"
 
-  return (
-    <header className="header">
-      <Navbar expand="md" className="navbar-dark">
-        <NavbarBrand className="header__logo" href="/">
-          YOUF!
-        </NavbarBrand>
-        <NavbarToggler onClick={toggle} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="me-auto" navbar>
-            <NavItem>
-              <Link to="/catalog" className="nav-link">Catalog</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/categories" className="nav-link">Categories</Link>
-            </NavItem>
-            <NavItem>
-              <Link to="/about" className="nav-link">About us</Link>
-            </NavItem>
-          </Nav>
-          <div className="header__actions">
-            {userType === 'guest' && (
-              <>
-                <Link to="/login" className="btn btn-primary rounded">Log in</Link>
-                <Link to="/register" className="btn btn-primary rounded">Registration</Link>
-              </>
-            )}
-            {userType === 'user' && (
-              <>
-                <div className="icon icon--cart">
-                  <img src={cartIcon} alt="Cart" />
-                </div>
-                <div className="icon icon--profile">
-                  <img src={profileIcon} alt="Profile" />
-                </div>
-              </>
-            )}
-            {userType === 'admin' && (
-              <div className="icon icon--profile">
-                <img src={profileIcon} alt="Admin Profile" />
-              </div>
-            )}
-          </div>
-        </Collapse>
-      </Navbar>
-    </header>
-  );
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            dispatch(checkAuth());
+        }
+    }, [dispatch]);
+
+    useEffect(() => {
+        console.log("Current user:", user);
+        console.log("Is authenticated:", isAuth);
+    }, [user, isAuth]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!isAuth) {
+        return <GuestHeader isOpen={isOpen} toggle={toggle} />;
+    }
+
+    return (
+        <header className="header">
+            {user.roleId === CUSTOMER_ROLE_ID && <UserHeader isOpen={isOpen} toggle={toggle} />}
+            {user.roleId === ADMIN_ROLE_ID && <AdminHeader isOpen={isOpen} toggle={toggle} />}
+        </header>
+    );
 };
 
 export default Header;

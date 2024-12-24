@@ -1,53 +1,32 @@
 const { Category } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const path = require('path');
+const fs = require('fs');
 const uuid = require('uuid');
 
 class CategoryController {
     async createCategory(req, res, next) {
         try {
-            // Логирование тела запроса и файлов
-            console.log('Тело запроса:', req.body);
-            console.log('Файлы запроса:', req.files);
-
             const { name } = req.body;
+            if (!req.files || !req.files.image) {
+                return next(ApiError.badRequest('Изображение не загружено'));
+            }
             const { image } = req.files;
-
-            if (!name) {
-                console.log('Ошибка: Имя категории не указано');
-                return next(ApiError.badRequest('Имя категории не может быть пустым'));
-            }
-
-            if (!image) {
-                console.log('Ошибка: Файл изображения не загружен');
-                return next(ApiError.badRequest('Файл изображения не загружен'));
-            }
-
+    
             const fileName = uuid.v4() + path.extname(image.name);
             const filePath = path.resolve(__dirname, '..', 'static', fileName);
-
-            // Попытка переместить файл
-            image.mv(filePath, err => {
-                if (err) {
-                    console.log('Ошибка при перемещении файла:', err);
-                    return next(ApiError.internal('Ошибка загрузки файла'));
-                }
+    
+            // Попробуем сохранить изображение
+            await image.mv(filePath).catch(err => {
+                return next(ApiError.internal('Ошибка при сохранении изображения: ' + err.message));
             });
-
-            // Попытка создания новой категории
-            const newCategory = await Category.create({ name, image: fileName });
-            console.log('Созданная категория:', newCategory);
-            res.status(201).json(newCategory);
+    
+            const category = await Category.create({ name, image: fileName });
+    
+            return res.json(category);
         } catch (error) {
-            // Расширенное логирование ошибок
             console.error('Ошибка создания категории:', error);
-            if (error instanceof TypeError) {
-                next(ApiError.internal('Type Error: ' + error.message));
-            } else if (error instanceof ReferenceError) {
-                next(ApiError.internal('Reference Error: ' + error.message));
-            } else {
-                next(ApiError.internal('Ошибка создания категории: ' + error.message));
-            }
+            next(ApiError.internal('Ошибка создания категории: ' + error.message));
         }
     }
 

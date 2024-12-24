@@ -1,0 +1,44 @@
+
+main {
+    position: relative; 
+    width: 100%;
+    height: 100vh; 
+    z-index: 1;
+  }  
+  .banner {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    font-size: 2em;
+    background-image: url(../../img/MainScreen.svg);
+    background-size: cover; 
+    background-repeat: no-repeat; 
+    background-position: center; 
+}
+
+.flipped-text {
+    color: #fff;
+    font-size: 240px; 
+    text-align: right;
+    transform: rotate(180deg) scaleX(1);
+    font-weight: bold;
+    font-style: italic;
+}
+
+.main-text {
+    color: #fff;
+    font-size: 240px; 
+    font-weight: bold;
+    text-align: right;
+    font-style: italic;
+}
+
+
+.tagline {
+    color: #fff;
+    font-size: 1.5em;
+    text-align: right;
+}

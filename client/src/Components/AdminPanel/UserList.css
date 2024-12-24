@@ -1,0 +1,118 @@
+.centios {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.user-list {
+  padding: 20px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.user-list h2 {
+  margin-bottom: 20px;
+  color: #fff;
+  text-align: center;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.user-list table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #222;
+  color: #fff;
+}
+
+.user-list th,
+.user-list td {
+  padding: 10px;
+  border: 1px solid #444;
+  text-align: left;
+}
+
+.user-list th {
+  background-color: #333;
+}
+
+.user-list select {
+  padding: 5px;
+  background-color: #444;
+  color: #fff;
+  border: 1px solid #555;
+}
+
+.user-list button {
+  padding: 5px 10px;
+  background-color: #6E4670;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.user-list button:hover {
+  background-color: #5A3B5C;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .user-list table,
+  .user-list thead,
+  .user-list tbody,
+  .user-list th,
+  .user-list td,
+  .user-list tr {
+    display: block;
+  }
+
+  .user-list th {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .user-list tr {
+    margin: 0 0 1rem 0;
+    border: 1px solid #444;
+  }
+
+  .user-list td {
+    border: none;
+    border-bottom: 1px solid #444;
+    position: relative;
+    padding-left: 50%;
+    text-align: left;
+  }
+
+  .user-list td:before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+    transform: translateY(-50%);
+    font-weight: bold;
+  }
+
+  .user-list td:nth-of-type(1):before { content: "ID"; }
+  .user-list td:nth-of-type(2):before { content: "Email"; }
+  .user-list td:nth-of-type(3):before { content: "First Name"; }
+  .user-list td:nth-of-type(4):before { content: "Last Name"; }
+  .user-list td:nth-of-type(5):before { content: "Role"; }
+  .user-list td:nth-of-type(6):before { content: "Action"; }
+}
+
+@media (max-width: 480px) {
+  .user-list h2 {
+    font-size: 1.5rem;
+  }
+
+  .user-list button {
+    width: 100%;
+    padding: 10px;
+  }
+}

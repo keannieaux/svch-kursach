@@ -1,0 +1,161 @@
+.kop {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+}
+
+.kooopl {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Выравнивание элементов по началу */
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem;
+  color: white;
+}
+
+.product-images {
+  width: 50%;
+}
+
+.product-images img {
+  width: 100%;
+  border-radius: 8px;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+.product-detail{
+  width: 50%;
+}
+.product-info-detail {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-header h1 {
+  font-size: 32px;
+  margin: 0;
+}
+
+.favorite-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+}
+
+.favorite-button img {
+  width: 50px;
+  height: 50px;
+}
+
+.product-colors {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.color-option {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+.product-description {
+  text-align: start;
+  font-size: 24px;
+  margin: 1rem 0;
+}
+
+.size-selector {
+  margin: 2rem 0;
+  text-align: start;
+}
+.size-selector h3{
+  font-size: 38px;
+}
+.size-grid {
+  display: grid;
+  font-size: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+  gap: 0.5rem;
+}
+
+.size-button {
+  padding: 0.75rem;
+  background: #E4E4E4;
+  border: none;
+  border-radius: 6px;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.size-button.selected {
+  background: #8b5cf6;
+}
+
+.product-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.add-to-cart1 {
+  padding: 5px 35px;
+  background: #6E4670;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 24px;
+}
+
+.add-to-cart1:hover {
+  background: #7c3aed;
+}
+
+.productimg {
+  margin: 1rem 0;
+  width: 30%;
+}
+@media (max-width: 768px) {
+  .kooopl {
+    flex-direction: column;
+    align-items: center;
+    margin-top: 300px;
+    padding: 0;
+  }
+  .product-detail{
+    width: 100%;
+  }
+}
+@media (max-width: 350px) {
+
+  .add-to-cart1{
+    padding: 5px;
+  }
+  .kooopl{
+    margin-top: 200px;
+  }
+}

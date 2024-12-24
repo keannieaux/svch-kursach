@@ -1,8 +1,11 @@
-const Router = require ('express')
-const orderController = require('../controllers/orderController')
-const router = new Router()
+const Router = require('express');
+const orderController = require('../controllers/orderController');
+const router = new Router();
 
-router.get('/getOrderByUser', orderController.getOrderByUser)
-router.post('/createOrder', orderController.createOrder)
+// Получить заказы пользователя по ID
+router.get('/users/:userId/orders', orderController.getOrdersByUser);
 
-module.exports = router
+// Добавить заказ
+router.post('/', orderController.addOrder);
+
+module.exports = router;

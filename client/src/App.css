@@ -1,7 +1,10 @@
 .App {
   text-align: center;
 }
-
+body{
+  scroll-snap-type: y mandatory;
+  background-color: #202020;
+}
 .App-logo {
   height: 40vmin;
   pointer-events: none;

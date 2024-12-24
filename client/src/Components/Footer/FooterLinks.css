@@ -1,0 +1,27 @@
+.footer-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+}
+
+.link-category:first-child{
+  text-align: left;
+}
+
+.link-category {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: right;
+}
+
+.footer-link {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+  font-size: 24px;
+}
+
+.footer-link:hover {
+  color: white;
+}

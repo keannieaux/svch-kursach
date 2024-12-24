@@ -1,0 +1,43 @@
+.footer-logo {
+  display: flex;
+  align-items: end;
+  gap: 230px;
+}
+
+.logo-text {
+  font-size: 170px;
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}
+.ico{
+  display: flex;
+  gap: 30px;
+}
+.social-icons {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: end;
+}
+
+.social-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #333;
+  transition: background-color 0.3s;
+}
+.social-icon img{
+  width: 50px;
+  height: 50px;
+}
+
+.social-icon:hover {
+  background-color: #444;
+}
+
+.copyright{
+  font-size: 24px;
+  color: #fff;
+}

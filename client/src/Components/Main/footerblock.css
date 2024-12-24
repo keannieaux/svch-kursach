@@ -1,0 +1,18 @@
+.containerfew {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.empty-block {
+    flex: 1;
+    background-color: #202020; /* Можно изменить цвет фона на любой другой */
+}
+
+footer {
+    width: 100%;
+    background: #303030;
+    color: #fff;
+    padding: 20px 0;
+    position: relative;
+}

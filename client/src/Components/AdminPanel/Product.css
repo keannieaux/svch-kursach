@@ -1,0 +1,113 @@
+.centio {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: auto;
+  padding-top: 10%;
+}
+
+.productiji {
+  display: flex;
+  justify-content: space-around;
+  align-items: start;
+  width: 100%;
+}
+
+.colorit {
+  color: #fff;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+h3 {
+  color: #fff;
+  text-shadow: 2px 2px 4px #000000;
+}
+
+.inputiki1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 10px;
+  margin: 0;
+}
+
+.inputiki1 h3 {
+  text-align: start;
+}
+
+.inputiki1 input,
+.inputiki1 textarea,
+.inputiki1 select,
+.inputiki1 button {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 1em;
+  width: 100%; /* Добавляем одинаковую ширину для всех инпутов */
+}
+
+.inputiki1 input::placeholder,
+.inputiki1 textarea::placeholder {
+  color: #888;
+}
+
+.inputiki1 input:focus,
+.inputiki1 textarea:focus,
+.inputiki1 select:focus {
+  border-color: #fff;
+  outline: none;
+}
+
+.inputiki1 button {
+  background-color: #6E4670;
+  cursor: pointer;
+}
+
+.inputiki1 button:hover {
+  background-color: #6E4670;
+}
+
+.error {
+  color: #ff0000;
+  font-weight: bold;
+}
+
+.product-list {
+  list-style-type: none; /* Убираем точки у списка */
+  padding: 0; /* Убираем отступы */
+}
+
+.product-list li {
+  text-align: left; /* Выровняем по левому краю */
+  margin-bottom: 10px; /* Добавим отступ между элементами */
+  cursor: pointer; /* Курсор при наведении */
+}
+
+.product-list li:hover {
+  text-decoration: underline; /* Подчеркнем текст при наведении */
+}
+.buttonchick{
+  background-color: #6E4670;
+}
+
+@media (max-width: 1023px) {
+  .productiji{
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+    padding-top: 10%;
+  }
+
+}
+
+@media (max-width: 500px) {
+  .productiji{
+    padding-top: 30%;
+  }
+
+}

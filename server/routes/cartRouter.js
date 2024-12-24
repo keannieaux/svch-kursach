@@ -1,9 +1,18 @@
-const Router = require ('express')
-const cartController = require('../controllers/cartController')
-const router = new Router()
+const Router = require('express');
+const router = new Router();
+const cartController = require('../controllers/cartController');
 
-router.get('/getCartByUser', cartController.getCartByUser)
-router.post('/addToCart', cartController.addToCart)
-router.delete('/removeFromCart', cartController.removeFromCart)
+// Остальные маршруты остаются без изменений
 
-module.exports = router
+router.get('/all', cartController.getAllCarts);
+
+// Получить корзину пользователя по ID
+router.get('/users/:userId/cart', cartController.getCartByUser);
+
+// Добавить товар в корзину
+router.post('/', cartController.addToCart); 
+
+// Удалить товар из корзины по ID
+router.delete('/:id', cartController.removeFromCart); 
+
+module.exports = router;

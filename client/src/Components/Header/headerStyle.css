@@ -1,0 +1,142 @@
+
+.navich {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  left: 0;
+  z-index: 10;
+}
+.header .navbar-dark {
+  position: relative;
+}
+.navbar-dark::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(19, 19, 19, 0.4);
+  z-index: -1; 
+}
+
+.header__logo {
+  font-size: 48px;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  margin-right: 2rem;
+}
+
+.header__nav {
+  display: flex;
+  gap: 2rem;
+}
+
+.header__nav .nav-link {
+  color: #fff;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.font{
+  font-size: 24px;
+  color: #fff;
+    font-weight: bold;
+}
+
+.header__nav .nav-link:hover {
+  color: #6E4670;
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.header__actions .icon {
+  width: 65px;
+  height: 65px;
+  border-radius: 50%;
+  background-color: #6E4670;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.header__actions .icon img {
+  width: 40px;
+  height: 40px;
+}
+
+.header__actions .icon:hover {
+  background-color: #5a375e;
+}
+
+
+.custom-button {
+  background-color: #6E4670; 
+  border-radius: 40px; 
+  border: 1px solid #6E4670; 
+  color: #fff; 
+  outline: none; 
+  box-shadow: none; 
+  user-select: none; 
+  width: 210px; 
+  height: 50px;
+  font-size: 24px; 
+  margin: 0; 
+  text-align: center;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.custom-button:first-child{
+  width: 130px;
+}
+
+.custom-button:hover {
+  background-color: #5a375e; 
+  border-color: #5a375e; 
+}
+
+.custom-button:active,
+.custom-button:focus,
+.custom-button:focus:active,
+.custom-button:active:focus {
+  background-color: #5a375e; 
+  border-color: #5a375e; 
+  color: #fff;
+  outline: none;
+  box-shadow: none;
+}
+
+.custom-button:focus {
+  outline: none; 
+  box-shadow: none; 
+}
+
+.container-fluid{
+  padding-left: 40px;
+  padding-right: 40px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+@media (max-width: 900px) {
+  .regist{
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 1rem;
+  }
+
+  .header__actions {
+    gap: 1rem;
+  }
+}

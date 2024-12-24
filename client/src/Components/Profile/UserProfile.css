@@ -1,0 +1,143 @@
+.opt {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: end; /* Центровка по горизонтали */
+  align-items: end; /* Центровка по вертикали */
+  position: relative;
+}
+
+.side-buttons {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-200%);
+}
+
+.side-button {
+  background-color: #333;
+  border-top-left-radius: 30px;
+  border-bottom-left-radius: 30px;
+  color: #fff;
+  border: none;
+  padding: 15px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.side-button:hover {
+  background-color: #551a8b;
+}
+
+.avatar-info {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 50px;
+}
+
+.user-profile {
+  background-color: #333;
+  color: #fff;
+  padding: 80px;
+  border-top-left-radius: 30px;
+  width: 80%;
+  height: 80%;
+  text-align: center;
+  position: relative;
+}
+
+.profile-section {
+  margin-top: 20px;
+}
+
+.avatar {
+  font-size: 50px;
+  text-align: center;
+}
+
+.user-info {
+  text-align: start;
+  margin: 10px 0;
+}
+
+.input-fields label {
+  display: block;
+  margin: 20px 0;
+  text-align: left;
+  font-weight: bold;
+  font-size: 24px;
+}
+
+.input-fields input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  background-color: #424242;
+  color: #fff;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.input-fields input:focus {
+  outline: none;
+  border-color: #6a1b9a;
+  box-shadow: 0 0 5px rgba(106, 27, 154, 0.5);
+}
+
+.checkmark {
+  color: green;
+  margin-left: 10px;
+  background-color: #333;
+  border: 1px solid #0ba112;
+  width: 5%;
+}
+
+.logout-button {
+  background-color: #6a1b9a;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  width: 15%;
+  border-radius: 15px;
+  cursor: pointer;
+  margin-top: 20px;
+  position: absolute;
+  bottom: 25px;
+  right: 35px;
+}
+.inputick{
+  display: flex;
+}
+
+@media (max-width: 1024px) {
+  .checkmark{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 10%;
+  }
+}
+
+@media (max-width: 800px) {
+  .avatar img{
+    width: 120px;
+  }
+  .avatar-info{
+    flex-direction: column;
+  }
+  .logout-button{
+    bottom: 10px;
+    right: 10px;
+    width: 30%;
+  }
+  .user-profile{
+    padding: 10px;
+  }
+}
+
+@media (max-width: 380px) {
+  .user-info p{
+    font-size: 24px;
+  }
+}

@@ -1,0 +1,31 @@
+.product-grid {
+  padding: 1rem;
+  background: #1a1a1a;
+  min-height: 100vh;
+  margin-top: 107px;
+}
+
+.filter-icon {
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+  gap: 2rem;
+  overflow-y: auto; 
+}
+
+@media (max-width: 768px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .products {
+    grid-template-columns: 1fr;
+  }
+}

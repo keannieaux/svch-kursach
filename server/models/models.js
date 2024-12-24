@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../db')
+const sequelize = require('../db');
 
 // Модель пользователя
 const User = sequelize.define('User', {
@@ -12,25 +12,23 @@ const User = sequelize.define('User', {
   phone_number: { type: DataTypes.STRING },
 }, {
   hooks: {
-    // Хук для назначения роли пользователя по умолчанию
     async beforeCreate(user) {
-      // Ищем роль "customer"
       const defaultRole = await Role.findOne({ where: { name: 'customer' } });
       if (defaultRole) {
-        // Присваиваем роль "customer"
         user.roleId = defaultRole.id;
       } else {
-        // Если роль "customer" не найдена, выбрасываем ошибку
         throw new Error('Роль "customer" не найдена');
       }
     }
   }
 });
 
-const Refresh_token = sequelize.define('refresh_token', {
-    id_user: {type : DataTypes.INTEGER, primaryKey: true, references: {model: User, key: 'id'}},
-    refresh_token: {type : DataTypes.STRING, allowNull: false},
-})
+// Модель рефреш-токена
+const Refresh_Token = sequelize.define('Refresh_Token', {
+  id_user: { type: DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' }},
+  refresh_token: { type: DataTypes.TEXT, allowNull: false },
+});
+
 // Модель роли
 const Role = sequelize.define('Role', {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -129,18 +127,19 @@ OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
 OrderItem.belongsTo(Product, { foreignKey: 'productId' });
 Product.hasMany(OrderItem, { foreignKey: 'productId' });
 
-User.hasOne(Refresh_token, {foreignKey: 'id_user', sourceKey: 'id'});
-Refresh_token.belongsTo(User, {foreignKey: 'id_user', targetKey: 'id'})
+// Пользователи и рефреш-токены
+User.hasOne(Refresh_Token, { foreignKey: 'id_user', sourceKey: 'id' });
+Refresh_Token.belongsTo(User, { foreignKey: 'id_user', targetKey: 'id' });
 
 module.exports = {
-    User,
-    Refresh_token,
-    Role,
-    Category,
-    Product,
-    ProductImage,
-    Cart,
-    Favorite,
-    Order,
-    OrderItem
-}
+  User,
+  Refresh_Token,
+  Role,
+  Category,
+  Product,
+  ProductImage,
+  Cart,
+  Favorite,
+  Order,
+  OrderItem
+};
