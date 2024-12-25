@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import imagecolor from '../../img/Rectangle.png';
 import imagerec from '../../img/X.png';
 
-const FavoriteCard = ({ id, name, price,  images = [], onPurchase, onRemove }) => {
+const FavoriteCard = ({ id, name, price, images = [], onRemove }) => {
   const navigate = useNavigate();
   const numericPrice = typeof price === 'number' ? price : parseFloat(price);
   const formattedPrice = !isNaN(numericPrice) ? numericPrice.toFixed(2) : 'N/A';
@@ -16,6 +16,11 @@ const FavoriteCard = ({ id, name, price,  images = [], onPurchase, onRemove }) =
   };
 
   const handleClick = () => {
+    navigate(`/product/${id}`);
+  };
+
+  const handlePurchase = (e) => {
+    e.stopPropagation();
     navigate(`/product/${id}`);
   };
 
@@ -40,10 +45,7 @@ const FavoriteCard = ({ id, name, price,  images = [], onPurchase, onRemove }) =
           <p className="product-price">${formattedPrice}</p>
           <button
             className="cart-product-buy"
-            onClick={(e) => {
-              e.stopPropagation(); // Остановка всплытия события клика
-              onPurchase(id);
-            }}
+            onClick={handlePurchase}
           >
             Add to cart
           </button>

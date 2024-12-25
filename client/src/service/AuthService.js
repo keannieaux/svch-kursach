@@ -5,7 +5,7 @@ export default class AuthService {
     static async login(email, password) {
         try {
             const response = await $api.post(API_ENDPOINTS.USER.LOGIN, { email, password });
-
+            console.log('Login response:', response.data);
             const authResponse = {
                 accessToken: response.data.accessToken,
                 refreshToken: response.data.refreshToken,

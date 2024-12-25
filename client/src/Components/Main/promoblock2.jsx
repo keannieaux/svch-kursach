@@ -11,7 +11,7 @@ const PromoBlock = () => {
             </div>
             <div className="promo-text1">
                 <h1>Make your own design</h1>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque vel nulla quis tellus facilisis posuere nec sed leo. Maecenas non augue iaculis, hendrerit velit sed, vulputate arcu. Integer nec orci sed ligula fringilla lacinia quis eu erat. Quisque nec orci non purus auctor laoreet sed in mauris.</p>
+                <p>Design is about creating visual harmony and balance. It involves choosing colors, shapes, and typography that work together to convey a message. Good design enhances user experience and makes information accessible. It requires creativity, attention to detail, and an understanding of the audience's needs.</p>
             </div>
             <div className="promo-image1">
                 <img src={sticker2} alt="Custom Sneakers" />

@@ -54,10 +54,23 @@ class CategoryController {
             const category = await Category.findByPk(req.params.id);
             if (!category) return next(ApiError.badRequest('Категория не найдена'));
 
-            await category.update(req.body);
+            const { name } = req.body;
+            let fileName = category.image;
+
+            if (req.files && req.files.image) {
+                const { image } = req.files;
+                fileName = uuid.v4() + path.extname(image.name);
+                const filePath = path.resolve(__dirname, '..', 'static', fileName);
+
+                await image.mv(filePath).catch(err => {
+                    return next(ApiError.internal('Ошибка при сохранении изображения: ' + err.message));
+                });
+            }
+
+            await category.update({ name, image: fileName });
             res.json(category);
         } catch (error) {
-            next(ApiError.internal('Ошибка при обновлении категории'));
+            next(ApiError.internal('Ошибка при обновлении категории: ' + error.message));
         }
     }
 

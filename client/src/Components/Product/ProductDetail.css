@@ -10,9 +10,8 @@
 .kooopl {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* Выравнивание элементов по началу */
   gap: 2rem;
-  width: 100%;
+  width: 80%;
   padding: 2rem;
   color: white;
 }
@@ -25,9 +24,9 @@
   width: 100%;
   border-radius: 8px;
   aspect-ratio: 1;
-  object-fit: cover;
 }
 .product-detail{
+  display: flex;
   width: 50%;
 }
 .product-info-detail {
@@ -138,6 +137,11 @@
 .productimg {
   margin: 1rem 0;
   width: 30%;
+}
+@media (max-width: 1440px) {
+  .kooopl {
+    width: 100%;
+  }
 }
 @media (max-width: 768px) {
   .kooopl {

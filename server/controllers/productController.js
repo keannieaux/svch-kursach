@@ -98,21 +98,16 @@ class ProductController {
                     const sizeArray = size ? size.split(',').map(s => parseInt(s.trim())) : product.size;
                     await product.update({ name, description, price, stock, size: sizeArray, categoryId });
         
-                    if (req.files && req.files.length > 0) {
-                        console.log('Updating Images:', req.files);
+                    if (req.files && req.files.images) {
+                        console.log('Updating Images:', req.files.images);
         
                         await ProductImage.destroy({ where: { productId: product.id } });
         
-                        const images = req.files;
+                        const images = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
                         const imageRecords = [];
         
                         for (const image of images) {
-                            console.log('Processing Image:', image);
-                            if (!image.originalname) {
-                                console.error('Image has no original name:', image);
-                                continue;
-                            }
-                            const fileName = uuid.v4() + path.extname(image.originalname);
+                            const fileName = uuid.v4() + path.extname(image.name);
                             const filePath = path.resolve(__dirname, '..', 'static', fileName);
         
                             await image.mv(filePath);
@@ -132,7 +127,6 @@ class ProductController {
                     next(ApiError.internal('Ошибка при обновлении товара: ' + error.message));
                 }
             }
-
 
     async deleteProduct(req, res, next) {
         try {

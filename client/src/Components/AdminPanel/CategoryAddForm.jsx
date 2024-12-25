@@ -29,7 +29,6 @@ const CategoryAddForm = () => {
       <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" required />
       <input type="file" onChange={handleImageChange} required />
       <button type="submit" disabled={isLoading}>Добавить категорию</button>
-      {error && <p className="error">{error}</p>}
     </form>
   );
 };

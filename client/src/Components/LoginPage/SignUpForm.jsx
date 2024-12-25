@@ -12,9 +12,7 @@ const SignUpForm = () => {
     firstname: '',
     lastname: '',
     email: '',
-    password: '',
-    delivery_address: '',
-    phone_number: ''
+    password: ''
   });
 
   useEffect(() => {
@@ -43,63 +41,47 @@ const SignUpForm = () => {
 
   return (
     <form className="auth-form" onSubmit={handleSubmit}>
-      <div className='jofix'>
+      <div className='jofix1'>
         <div className="form-group">
+          <label htmlFor="firstname">First name</label>
           <input
             type="text"
+            id="firstname"
             name="firstname"
-            placeholder="First name"
             value={formData.firstname}
             onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
+          <label htmlFor="lastname">Last name</label>
           <input
             type="text"
+            id="lastname"
             name="lastname"
-            placeholder="Last name"
             value={formData.lastname}
             onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
+          <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             name="email"
-            placeholder="Email"
             value={formData.email}
             onChange={handleChange}
             required
           />
         </div>
         <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
             type="password"
+            id="password"
             name="password"
-            placeholder="Password"
             value={formData.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="text"
-            name="delivery_address"
-            placeholder="Delivery address"
-            value={formData.delivery_address}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="form-group">
-          <input
-            type="tel"
-            name="phone_number"
-            placeholder="Phone number"
-            value={formData.phone_number}
             onChange={handleChange}
             required
           />
@@ -107,7 +89,6 @@ const SignUpForm = () => {
         <button type="submit" className="submit-button1" disabled={isLoading}>
           {isLoading ? 'Registering...' : 'Create account'}
         </button>
-        {error && <p className="error-message">{error}</p>}
       </div>
     </form>
   );

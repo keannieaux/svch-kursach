@@ -3,18 +3,30 @@
   flex-direction: column;
   gap: 1rem;
 }
-
+.jofix1{
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+}
 .form-group {
   position: relative;
+  width: 100%;
   margin-bottom: 20px;
+  color: #fff;
+  text-align: start;
 }
-
+.form-group label {
+  font-size: 26px;
+  font-weight: bold;
+  padding-bottom: 10px;
+}
 .auth-form input {
   width: 100%;
   padding: 0.75rem;
   background: #333;
   border: none;
-  border-radius: 6px;
+  border-radius: 26px;
   color: white;
   font-size: 1rem;
 }
@@ -31,11 +43,12 @@
 
 .submit-button1 {
   width: 50%;
-  padding: 0.75rem;
-  background: #8b5cf6;
+  font-size: 24px;
+  padding: 10px 20px;
+  background: #6E4670;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 26px;
   font-size: 1rem;
   cursor: pointer;
   transition: background-color 0.3s;

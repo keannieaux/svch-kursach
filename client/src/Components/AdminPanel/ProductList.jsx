@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllProducts } from '../../store/slice/productSlice';
+import { getAllProducts, deleteProduct } from '../../store/slice/productSlice';
 import './Product.css';
 
 const ProductList = ({ onSelectProduct }) => {
@@ -12,15 +12,19 @@ const ProductList = ({ onSelectProduct }) => {
     dispatch(getAllProducts({ page: 1, limit: 100 }));
   }, [dispatch]);
 
+  const handleDelete = (id) => {
+    dispatch(deleteProduct(id));
+  };
+
   return (
     <div className="category-list">
       <h3>Список продуктов</h3>
       {isLoading && <p>Загрузка...</p>}
-      {error && <p className="error">{error}</p>}
       <ul>
         {products.map(product => (
-          <li key={product.id} onClick={() => onSelectProduct(product)}>
-            {product.name}
+          <li key={product.id}>
+            <span onClick={() => onSelectProduct(product)}>{product.name}</span>
+            <button onClick={() => handleDelete(product.id)} className="delete-button">Удалить</button>
           </li>
         ))}
       </ul>

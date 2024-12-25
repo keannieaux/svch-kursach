@@ -19,14 +19,15 @@ export default class ProductService {
     return response.data;
   }
 
-  static async updateProduct(id, productData) {
-    const response = await $api.put(API_ENDPOINTS.PRODUCT.UPDATE(id), productData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }
-    });
-    return response.data;
-  }
+    static async updateProduct(id, productData) {
+      const response = await $api.put(API_ENDPOINTS.PRODUCT.UPDATE(id), productData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        }
+      });
+      return response.data;
+    }
+  
 
   static async deleteProduct(id) {
     const response = await $api.delete(API_ENDPOINTS.PRODUCT.DELETE(id));

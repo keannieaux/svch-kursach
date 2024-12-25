@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllCategories } from '../../store/slice/CategorySlice';
+import { getAllCategories, deleteCategory } from '../../store/slice/CategorySlice';
 import CategoryUpdateForm from './CategoryUpdateForm';
-import ModalCategory from './ModalCategory'; // Ensure this is the correct import
+import ModalCategory from './ModalCategory';
 import './Category.css';
 
 const CategoryList = () => {
@@ -21,11 +21,23 @@ const CategoryList = () => {
     setIsModalOpen(true);
   };
 
+  const handleDelete = (id) => {
+    dispatch(deleteCategory(id));
+  };
+
   const handleCloseModal = () => {
     console.log('Modal closed');
     setIsModalOpen(false);
-    setSelectedCategoryId(null); // Сбрасываем выбранную категорию при закрытии модального окна
+    setSelectedCategoryId(null);
   };
+
+  useEffect(() => {
+    console.log('Loading state changed:', isLoading);
+  }, [isLoading]);
+
+  useEffect(() => {
+    console.log('Error state changed:', error);
+  }, [error]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -35,13 +47,16 @@ const CategoryList = () => {
     return <div>Error: {error}</div>;
   }
 
+  console.log('Is Modal Open:', isModalOpen);
+
   return (
     <div className="category-list">
       <h3>Список категорий</h3>
       <ul>
         {categories.map(category => (
-          <li key={category.id} onClick={() => handleCategoryClick(category.id)}>
-            <span>{category.name}</span>
+          <li key={category.id}>
+            <span onClick={() => handleCategoryClick(category.id)}>{category.name}</span>
+            <button onClick={() => handleDelete(category.id)} className="delete-button">Удалить</button>
           </li>
         ))}
       </ul>

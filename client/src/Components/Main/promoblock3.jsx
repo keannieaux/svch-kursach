@@ -12,7 +12,7 @@ const PromoBlock = () => {
                 <div className="number3">03</div>
             </div>
             <div className="promo-content3">
-                <h1>Make your own design</h1>
+                <h1>Design shapes our world</h1>
                 <div className="sneaker-designs">
                     <div className="sneaker">
                         <img src={sneaker1} alt="Sneaker Design 1" />

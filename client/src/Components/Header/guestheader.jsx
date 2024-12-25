@@ -18,9 +18,6 @@ const GuestHeader = ({ isOpen, toggle }) => {
                         <Link to="/catalog" className="nav-link font">Catalog</Link>
                     </NavItem>
                     <NavItem>
-                        <Link to="/categories" className="nav-link font">Categories</Link>
-                    </NavItem>
-                    <NavItem>
                         <Link to="/about" className="nav-link font">About us</Link>
                     </NavItem>
                 </Nav>

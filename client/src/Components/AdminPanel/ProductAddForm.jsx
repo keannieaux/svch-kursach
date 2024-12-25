@@ -26,7 +26,7 @@ const ProductAddForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
@@ -34,14 +34,13 @@ const ProductAddForm = () => {
     formData.append('stock', stock);
     formData.append('size', size);
     formData.append('categoryId', categoryId);
-    newImages.forEach((image, index) => {
-      formData.append(`images[${index}]`, image);
+    newImages.forEach((image) => {
+      formData.append('images', image);
     });
-
+    
     dispatch(createProduct(formData));
-    window.location.reload(); 
   };
-
+  
   return (
     <form onSubmit={handleSubmit} className='inputiki1'>
       <h3>Добавить новый продукт</h3>
@@ -58,7 +57,6 @@ const ProductAddForm = () => {
       </select>
       <input type="file" multiple onChange={handleImageChange} />
       <button type="submit" className='buttonchick' disabled={isLoading}>Добавить продукт</button>
-      {error && <p className="error">{error}</p>}
     </form>
   );
 };

@@ -16,13 +16,10 @@ const AdminHeader = ({ isOpen, toggle }) => {
             <Collapse isOpen={isOpen} navbar>
                 <Nav className="me-auto" navbar>
                     <NavItem>
-                        <Link to="/catalog" className="nav-link">Catalog</Link>
+                        <Link to="/catalog" className="nav-link font">Catalog</Link>
                     </NavItem>
                     <NavItem>
-                        <Link to="/categories" className="nav-link">Categories</Link>
-                    </NavItem>
-                    <NavItem>
-                        <Link to="/about" className="nav-link">About us</Link>
+                        <Link to="/about" className="nav-link font">About us</Link>
                     </NavItem>
                 </Nav>
                 <div className="header__actions">

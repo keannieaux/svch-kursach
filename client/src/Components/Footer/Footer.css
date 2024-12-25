@@ -74,6 +74,9 @@
     text-align: center;
     gap: 1rem;
   }
+  .flipped-text, .main-text{
+    font-size: 100px;
+  }
 }
 
 @media (max-width: 508px) {

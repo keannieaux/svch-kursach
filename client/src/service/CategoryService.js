@@ -15,10 +15,12 @@ export default class CategoryService {
         return response.data;
     }
 
-    static async getAllCategories() {
-        const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ALL);
-        return response.data;
-    }
+        static async getAllCategories() {
+            const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ALL);
+            console.log('Категории из сервиса:', response.data); // Логируем полученные данные
+            return response.data;
+        }
+    
 
     static async getCategoryById(id) {
         const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ONE(id));

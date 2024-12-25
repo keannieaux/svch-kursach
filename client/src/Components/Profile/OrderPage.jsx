@@ -65,7 +65,6 @@ const OrdersPage = () => {
               ))
             )}
           </div>
-          {orderError && <p className="error">Ошибка загрузки заказов: {orderError}</p>}
         </div>
       </div>
     </div>

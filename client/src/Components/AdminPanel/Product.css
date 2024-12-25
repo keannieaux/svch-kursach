@@ -73,7 +73,7 @@ h3 {
 }
 
 .error {
-  color: #ff0000;
+  color: #82373e;
   font-weight: bold;
 }
 
@@ -93,6 +93,18 @@ h3 {
 }
 .buttonchick{
   background-color: #6E4670;
+}
+.category-list .delete-button {
+  margin-left: 10px;
+  background-color: #82373e;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.category-list .delete-button:hover {
+  background-color: #82373e;
 }
 
 @media (max-width: 1023px) {

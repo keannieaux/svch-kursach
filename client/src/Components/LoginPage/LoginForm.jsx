@@ -23,21 +23,23 @@ const LoginForm = () => {
 
   return (
     <form className="auth-form" onSubmit={handleLogin}>
-      <div className='jofix'>
+      <div className='jofix1'>
         <div className="form-group">
+          <label htmlFor="email">Email</label>
           <input
             type="email"
+            id="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
             required
           />
         </div>
         <div className="form-group">
+          <label htmlFor="password">Password</label>
           <input
             type="password"
+            id="password"
             required
-            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
@@ -45,7 +47,6 @@ const LoginForm = () => {
         <button type="submit" className="submit-button1" disabled={isLoading}>
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
-        {error && <p className="error-message">{error}</p>}
       </div>
     </form>
   );

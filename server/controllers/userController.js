@@ -8,11 +8,11 @@ class UserController {
 
     async registration(req, res, next) {
         try {
-            const { email, password, firstname, lastname, delivery_address, phone_number } = req.body;
+            const { email, password, firstname, lastname, } = req.body;
     
-            console.log('Received registration data:', { email, password, firstname, lastname, delivery_address, phone_number });
+            console.log('Received registration data:', { email, password, firstname, lastname, });
     
-            if (!email.trim() || !password.trim() || !firstname.trim() || !lastname.trim() || !delivery_address.trim()) {
+            if (!email.trim() || !password.trim() || !firstname.trim() || !lastname.trim()) {
                 return res.status(400).json({ message: "Все поля должны быть заполнены, пустых не может быть" });
             }
     
@@ -21,7 +21,7 @@ class UserController {
                 return res.status(400).json({ message: "Ошибка валидации: пароль от 3 до 32 символов или неправильно введена почта" });
             }
     
-            const userData = await userService.register(email, password, firstname, lastname, delivery_address, phone_number);
+            const userData = await userService.register(email, password, firstname, lastname,);
             res.cookie('refreshToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
             return res.json(userData);
         } catch (e) {
@@ -138,43 +138,44 @@ class UserController {
         }
       }
     
-      async updateUser(req, res, next) {
-        try {
-          const { id } = req.params;
-          const { email, firstname, lastname, delivery_address, phone_number } = req.body;
+        async updateUser(req, res, next) {
+            try {
+                const errors = validationResult(req);
+                if (!errors.isEmpty()) {
+                    console.log("Validation errors:", errors.array());
+                    return res.status(400).json({ errors: errors.array() });
+                }
     
-          // Проверка обязательных полей
-          if (!delivery_address) {
-            console.log("Delivery address is missing");
-            return res.status(400).json({ message: "Адрес доставки не может быть пустым" });
-          }
+                const { id } = req.params;
+                const { email, firstname, lastname, delivery_address, phone_number } = req.body;
     
-          console.log(`Updating user with ID: ${id}`);
-          console.log(`Received data: ${JSON.stringify(req.body)}`);
+                console.log(`Updating user with ID: ${id}`);
+                console.log(`Received data: ${JSON.stringify(req.body)}`);
     
-          const user = await User.findOne({ where: { id } });
-          if (!user) {
-            console.log("User not found");
-            return res.status(404).json({ message: "Пользователь не найден" });
-          }
+                const user = await User.findOne({ where: { id } });
+                if (!user) {
+                    console.log("User not found");
+                    return res.status(404).json({ message: "Пользователь не найден" });
+                }
     
-          // Обновление полей пользователя
-          if (email) user.email = email;
-          if (firstname) user.firstname = firstname;
-          if (lastname) user.lastname = lastname;
-          user.delivery_address = delivery_address;
-          if (phone_number) user.phone_number = phone_number;
+                // Обновление полей пользователя
+                if (email) user.email = email;
+                if (firstname) user.firstname = firstname;
+                if (lastname) user.lastname = lastname;
+                if (delivery_address) user.delivery_address = delivery_address;
+                if (phone_number || phone_number === '') user.phone_number = phone_number;
     
-          await user.save();
+                await user.save();
     
-          console.log('User updated successfully:', user);
+                console.log('User updated successfully:', user);
     
-          return res.json({ message: "Информация о пользователе обновлена", user });
-        } catch (e) {
-          console.error(e);
-          next(ApiError.internal(e.message));
+                return res.json({ message: "Информация о пользователе обновлена", user });
+            } catch (e) {
+                console.error(e);
+                next(ApiError.internal(e.message));
+            }
         }
-      }
+
 }
 
 module.exports = new UserController();

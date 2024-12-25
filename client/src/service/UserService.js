@@ -15,11 +15,12 @@ export default class UserService {
   }
 
   static async updateUser(userId, userData) {
-    console.log("Sending data to server for updating user:", userData);
+    console.log("Sending data to server for updating user:", JSON.stringify(userData));
     const response = await $api.put(API_ENDPOINTS.USER.UPDATE(userId), userData);
     console.log('Update user response:', response.data);
     return response.data;
   }
+  
 }
 
 

@@ -86,12 +86,12 @@
   align-items: center;
 }
 .cart-product-remove {
-  background-color: #771d26;
+  background-color: #82373e;
   color: #fff;
   border: none;
   padding: 10px 15px;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 10px;
   margin-left: 20px;
 }
 .cart-product-buy {

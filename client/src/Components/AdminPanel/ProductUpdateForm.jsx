@@ -13,7 +13,7 @@ const ProductUpdateForm = ({ product }) => {
   const [categoryId, setCategoryId] = useState('');
   const [newImages, setNewImages] = useState([]);
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector(state => state.product);
+  const { isLoading, error, success } = useSelector(state => state.product);
 
   useEffect(() => {
     if (product) {
@@ -41,9 +41,11 @@ const ProductUpdateForm = ({ product }) => {
     formData.append('stock', stock);
     formData.append('size', size);
     formData.append('categoryId', categoryId);
-    newImages.forEach((image, index) => {
-      formData.append(`images[${index}]`, image);
+    newImages.forEach((image) => {
+      formData.append('images', image);
     });
+
+    console.log('Form Data:', formData);
 
     if (product) {
       dispatch(updateProduct({ id: product.id, productData: formData }));
@@ -56,19 +58,48 @@ const ProductUpdateForm = ({ product }) => {
         <>
           <h3>Обновить продукт {product.name}</h3>
           <form onSubmit={handleSubmit} className="inputiki1">
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" required />
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Описание" required />
-            <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Цена" required />
-            <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="Количество" required />
-            <input type="text" value={size} onChange={(e) => setSize(e.target.value)} placeholder="Размер" required />
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Название"
+              required
+            />
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Описание"
+              required
+            />
+            <input
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Цена"
+              required
+            />
+            <input
+              type="number"
+              value={stock}
+              onChange={(e) => setStock(e.target.value)}
+              placeholder="Количество"
+              required
+            />
+            <input
+              type="text"
+              value={size}
+              onChange={(e) => setSize(e.target.value)}
+              placeholder="Размер"
+              required
+            />
             <CategorySelect selectedCategory={categoryId} onSelectCategory={setCategoryId} />
             <input type="file" multiple onChange={handleImageChange} />
             <button type="submit" disabled={isLoading}>Обновить продукт</button>
-            {error && <p className="error">{error}</p>}
+            {success && <p className="success">Продукт успешно обновлен!</p>} {/* Сообщение об успешном обновлении */}
           </form>
         </>
       ) : (
-        <p></p>
+        <p>Продукт не выбран</p> 
       )}
     </div>
   );
