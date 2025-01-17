@@ -2,6 +2,7 @@ const Router = require('express');
 const { check } = require('express-validator');
 const userController = require('../controllers/userController');
 
+
 const router = new Router();
 
 // Регистрация нового пользователя
@@ -27,9 +28,6 @@ router.post('/refresh', userController.refresh);
 
 // Получение всех пользователей
 router.get('/', userController.getAll);
-
-// Получение пользователя по ID
-router.get('/:id', userController.getOne);
 
 // Обновление роли пользователя по ID
 router.put('/role/:id', userController.updateUserRole);

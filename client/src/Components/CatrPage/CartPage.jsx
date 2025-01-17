@@ -33,13 +33,13 @@ const CartPage = ({ userId }) => {
         }
     };
 
-    const handleRemoveItem = (id) => {
-        console.log("Attempting to remove cart item with ID:", id); // Логирование
-        dispatch(removeFromCart(id));
+    const handleRemoveItem = (_id) => {
+        console.log("Attempting to remove cart item with ID:", _id); // Логирование
+        dispatch(removeFromCart(_id));
     };
 
-    const handlePurchase = (id) => {
-        const item = cartItems.find((item) => item.id === id);
+    const handlePurchase = (_id) => {
+        const item = cartItems.find((item) => item._id === _id);
         if (item) {
             const orderItems = [{
                 productId: item.productId,
@@ -47,7 +47,7 @@ const CartPage = ({ userId }) => {
                 size: item.size
             }];
             dispatch(addOrder({ userId, items: orderItems }));
-            dispatch(removeFromCart(item.id));
+            dispatch(removeFromCart(item._id));
             window.location.reload(); 
         }
     };
@@ -60,7 +60,7 @@ const CartPage = ({ userId }) => {
         }));
 
         dispatch(addOrder({ userId, items: orderItems }));
-        orderItems.forEach(item => dispatch(removeFromCart(item.id)));
+        orderItems.forEach(item => dispatch(removeFromCart(item._id)));
     };
 
     if (cartStatus === 'loading') {
@@ -94,8 +94,8 @@ const CartPage = ({ userId }) => {
             ) : (
                 cartItems.map((item) => (
                     <CartProductCard
-                        key={item.id}
-                        id={item.id}
+                        key={item._id}
+                        _id={item._id}
                         name={item.Product.name || "Нет названия"}
                         price={parseFloat(item.Product.price) || 0}
                         size={item.size}

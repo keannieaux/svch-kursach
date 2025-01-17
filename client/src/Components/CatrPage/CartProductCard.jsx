@@ -3,7 +3,7 @@ import './CartProductCard.css';
 import imagerec from '../../img/Rectangle.png';
 import { FaTrashAlt, FaChevronUp, FaChevronDown, FaShoppingCart } from 'react-icons/fa';
 
-const CartProductCard = ({ id, name, price, size, quantity, image, onIncreaseQuantity, onDecreaseQuantity, onRemove, onPurchase }) => {
+const CartProductCard = ({ _id, name, price, size, quantity, image, onIncreaseQuantity, onDecreaseQuantity, onRemove, onPurchase }) => {
     const imageUrl = `${process.env.REACT_APP_API_BASE_URL}/static/${image}`;
 
     return (
@@ -21,10 +21,10 @@ const CartProductCard = ({ id, name, price, size, quantity, image, onIncreaseQua
             <div className="cart-product-actions">
             <p className="cart-product-price">{price.toFixed(2)} $</p>
                 <div>
-                <button className="cart-product-buy" onClick={() => onPurchase(id)}>
+                <button className="cart-product-buy" onClick={() => onPurchase(_id)}>
                     Quick Buy
                 </button>
-                <button className="cart-product-remove" onClick={() => onRemove(id)}>
+                <button className="cart-product-remove" onClick={() => onRemove(_id)}>
                     <FaTrashAlt />
                 </button>
                 </div>

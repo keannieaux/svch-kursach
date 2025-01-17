@@ -1,54 +1,55 @@
 const { Order, OrderItem, Product, ProductImage } = require('../models/models');
 const ApiError = require('../error/ApiError');
-const { Op } = require('sequelize');
+const mongoose = require('mongoose');
 
 class OrderController {
     async getOrdersByUser(req, res, next) {
         try {
             const { page = 1, limit = 10 } = req.query;
-            const offset = (page - 1) * limit;
+            const skip = (page - 1) * limit;
 
-            const orders = await Order.findAndCountAll({
-                where: { userId: req.params.userId },
-                include: [{ 
-                    model: OrderItem,
-                    include: [{ 
-                        model: Product,
-                        include: [ProductImage] // Загрузка изображений продукта
-                    }]
-                }],
-                limit: parseInt(limit),
-                offset: parseInt(offset)
-            });
+            const userId = req.params.userId;
 
-            const totalPages = Math.ceil(orders.count / limit);
+            const orders = await Order.find({ userId })
+                .populate({
+                    path: 'items',
+                    populate: {
+                        path: 'productId',
+                        populate: { path: 'images', model: 'ProductImage' }
+                    }
+                })
+                .skip(skip)
+                .limit(parseInt(limit))
+                .exec();
 
-            const orderData = orders.rows.map(order => ({
-                id: order.id,
+            const total = await Order.countDocuments({ userId });
+            const totalPages = Math.ceil(total / limit);
+
+            const orderData = orders.map(order => ({
+                id: order._id,
                 userId: order.userId,
                 createdAt: order.createdAt,
                 status: order.status,
-                items: order.OrderItems.map(item => ({
-                    id: item.id,
-                    orderId: item.orderId,
-                    productId: item.productId,
-                    productName: item.Product.name,
-                    productPrice: item.Product.price,
-                    productColors: item.Product.colors,
-                    productImages: item.Product.ProductImages.map(img => img.url), // Изменение здесь
+                items: order.items.map(item => ({
+                    id: item._id,
+                    productId: item.productId._id,
+                    productName: item.productId.name,
+                    productPrice: item.productId.price,
+                    productColors: item.productId.colors,
+                    productImages: item.productId.images.map(img => img.url),
                     quantity: item.quantity,
                     size: item.size
                 }))
             }));
 
             res.json({
-                total: orders.count,
+                total,
                 totalPages,
-                currentPage: page,
+                currentPage: parseInt(page),
                 orders: orderData,
             });
         } catch (error) {
-            console.error('Ошибка при выборке заказов:', error); // Логирование ошибки
+            console.error('Ошибка при выборке заказов:', error);
             next(ApiError.internal('Ошибка при выборке заказов'));
         }
     }
@@ -57,43 +58,53 @@ class OrderController {
         try {
             const { userId, items } = req.body;
 
-            const order = await Order.create({ userId, total_price: 0, status: 'Pending' });
-
             let totalPrice = 0;
+            const orderItems = [];
+
             for (const item of items) {
-                const product = await Product.findByPk(item.productId);
+                const product = await Product.findById(item.productId).exec();
                 if (!product) {
                     return next(ApiError.badRequest('Товар не найден'));
                 }
 
-                await OrderItem.create({
-                    orderId: order.id,
-                    productId: item.productId,
+                const orderItem = new OrderItem({
+                    productId: product._id,
                     quantity: item.quantity,
                     size: item.size,
                     price: product.price
                 });
 
+                await orderItem.save();
+
                 totalPrice += product.price * item.quantity;
+                orderItems.push(orderItem._id);
             }
 
-            order.total_price = totalPrice;
+            const order = new Order({
+                userId: mongoose.Types.ObjectId(userId),
+                items: orderItems,
+                total_price: totalPrice,
+                status: 'Pending'
+            });
+
             await order.save();
 
             res.status(201).json(order);
         } catch (error) {
-            console.error('Ошибка при добавлении заказа:', error); // Логирование ошибки
+            console.error('Ошибка при добавлении заказа:', error);
             next(ApiError.internal('Ошибка при добавлении заказа'));
         }
     }
 
     async updateOrderStatus() {
         try {
-            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000); // 24 часа назад
-            await Order.update(
-                { status: 'Completed' },
-                { where: { createdAt: { [Op.lte]: oneDayAgo }, status: 'Pending' } }
+            const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+
+            await Order.updateMany(
+                { createdAt: { $lte: oneDayAgo }, status: 'Pending' },
+                { $set: { status: 'Completed' } }
             );
+
             console.log('Статусы заказов обновлены');
         } catch (error) {
             console.error('Ошибка при обновлении статусов заказов:', error);

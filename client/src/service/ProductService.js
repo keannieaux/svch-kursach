@@ -14,13 +14,13 @@ export default class ProductService {
     return response.data;
   }
 
-  static async getProductById(id) {
-    const response = await $api.get(API_ENDPOINTS.PRODUCT.GET_ONE(id));
+  static async getProductById(_id) {
+    const response = await $api.get(API_ENDPOINTS.PRODUCT.GET_ONE(_id));
     return response.data;
   }
 
-    static async updateProduct(id, productData) {
-      const response = await $api.put(API_ENDPOINTS.PRODUCT.UPDATE(id), productData, {
+    static async updateProduct(_id, productData) {
+      const response = await $api.put(API_ENDPOINTS.PRODUCT.UPDATE(_id), productData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }
@@ -29,8 +29,8 @@ export default class ProductService {
     }
   
 
-  static async deleteProduct(id) {
-    const response = await $api.delete(API_ENDPOINTS.PRODUCT.DELETE(id));
+  static async deleteProduct(_id) {
+    const response = await $api.delete(API_ENDPOINTS.PRODUCT.DELETE(_id));
     return response.data;
   }
 }

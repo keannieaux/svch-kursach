@@ -2,51 +2,50 @@ const { Role } = require('../models/models');
 const ApiError = require('../error/ApiError');
 
 class RoleController {
-    // Получить все роли с пагинацией
     async getAllRoles(req, res, next) {
         try {
             const { page = 1, limit = 10 } = req.query;
-            const offset = (page - 1) * limit; 
+            const skip = (page - 1) * limit;
 
-            const roles = await Role.findAndCountAll({
-                limit: parseInt(limit),
-                offset: parseInt(offset), 
-            });
+            const roles = await Role.find()
+                .skip(skip)
+                .limit(parseInt(limit))
+                .exec();
 
-            const totalPages = Math.ceil(roles.count / limit); 
+            const total = await Role.countDocuments();
+            const totalPages = Math.ceil(total / limit);
 
             res.json({
-                total: roles.count,
+                total,
                 totalPages,
-                currentPage: page,
-                roles: roles.rows,
+                currentPage: parseInt(page),
+                roles
             });
         } catch (error) {
             next(ApiError.internal('Ошибка при выборке ролей'));
         }
     }
 
-    // Создать роль
     async createRole(req, res, next) {
         try {
             const { name } = req.body;
 
-            const existingRole = await Role.findOne({ where: { name } });
+            const existingRole = await Role.findOne({ name }).exec();
             if (existingRole) {
                 return next(ApiError.badRequest('Роль с таким именем уже существует'));
             }
 
-            const newRole = await Role.create({ name });
+            const newRole = new Role({ name });
+            await newRole.save();
             res.status(201).json(newRole);
         } catch (error) {
             next(ApiError.internal('Ошибка при создании роли'));
         }
     }
 
-    // Получить роль по ID
     async getRoleById(req, res, next) {
         try {
-            const role = await Role.findByPk(req.params.id);
+            const role = await Role.findById(req.params.id).exec();
             if (!role) return next(ApiError.badRequest('Роль не найдена'));
             res.json(role);
         } catch (error) {
@@ -54,26 +53,25 @@ class RoleController {
         }
     }
 
-    // Обновить роль
     async updateRole(req, res, next) {
         try {
-            const role = await Role.findByPk(req.params.id);
+            const role = await Role.findById(req.params.id).exec();
             if (!role) return next(ApiError.badRequest('Роль не найдена'));
 
-            await role.update(req.body);
+            Object.assign(role, req.body);
+            await role.save();
             res.json(role);
         } catch (error) {
             next(ApiError.internal('Ошибка при обновлении роли'));
         }
     }
 
-    // Удалить роль
     async deleteRole(req, res, next) {
         try {
-            const role = await Role.findByPk(req.params.id);
+            const role = await Role.findById(req.params.id).exec();
             if (!role) return next(ApiError.badRequest('Роль не найдена'));
 
-            await role.destroy();
+            await role.remove();
             res.json({ message: 'Роль удалена' });
         } catch (error) {
             next(ApiError.internal('Ошибка при удалении роли'));

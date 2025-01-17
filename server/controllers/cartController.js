@@ -3,16 +3,15 @@ const ApiError = require('../error/ApiError');
 
 class CartController {
 
+    // Получить все корзины
     async getAllCarts(req, res, next) {
         try {
-            const cartItems = await Cart.findAll({
-                include: [{
-                    model: Product,
-                    include: [ProductImage]
-                }, {
-                    model: User
-                }]
-            });
+            const cartItems = await Cart.find()
+                .populate({
+                    path: 'product',
+                    populate: { path: 'images' } // Загрузка изображений продукта
+                })
+                .populate('user'); // Загрузка пользователя
 
             res.json(cartItems);
         } catch (error) {
@@ -21,33 +20,31 @@ class CartController {
         }
     }
 
+    // Получить корзину пользователя
     async getCartByUser(req, res, next) {
         try {
-            const { page = 1, limit = 10 } = req.query; 
-            const offset = (page - 1) * limit; 
+            const { page = 1, limit = 10 } = req.query;
+            const offset = (page - 1) * limit;
 
-            const cartItems = await Cart.findAndCountAll({
-                where: { userId: req.params.userId },
-                include: [{ 
-                    model: Product,
-                    include: [ProductImage] // Загрузка изображений продукта
-                }],
-                limit: parseInt(limit),
-                offset: parseInt(offset) 
-            });
+            const cartItems = await Cart.find({ user: req.params.userId })
+                .populate({
+                    path: 'product',
+                    populate: { path: 'images' }
+                })
+                .skip(offset)
+                .limit(parseInt(limit));
 
-            const totalPages = Math.ceil(cartItems.count / limit);
-
-            console.log("Cart items from DB:", cartItems.rows); // Логирование
+            const totalItems = await Cart.countDocuments({ user: req.params.userId });
+            const totalPages = Math.ceil(totalItems / limit);
 
             res.json({
-                total: cartItems.count,
+                total: totalItems,
                 totalPages,
-                currentPage: page,
-                items: cartItems.rows,
+                currentPage: parseInt(page),
+                items: cartItems,
             });
         } catch (error) {
-            console.error('Ошибка при получении корзины:', error); // Логирование ошибки
+            console.error('Ошибка при получении корзины:', error);
             next(ApiError.internal('Ошибка при получении корзины'));
         }
     }
@@ -57,17 +54,19 @@ class CartController {
         try {
             const { userId, productId, quantity, size } = req.body;
 
-            const existingCartItem = await Cart.findOne({ where: { userId, productId, size } });
+            const existingCartItem = await Cart.findOne({ user: userId, product: productId, size });
             if (existingCartItem) {
                 existingCartItem.quantity += quantity;
                 await existingCartItem.save();
                 return res.status(200).json(existingCartItem);
             }
 
-            const cartItem = await Cart.create({ userId, productId, quantity, size });
+            const cartItem = new Cart({ user: userId, product: productId, quantity, size });
+            await cartItem.save();
+
             res.status(201).json(cartItem);
         } catch (error) {
-            console.error('Ошибка при добавлении в корзину:', error); // Логирование ошибки
+            console.error('Ошибка при добавлении в корзину:', error);
             next(ApiError.internal('Ошибка при добавлении в корзину'));
         }
     }
@@ -75,16 +74,15 @@ class CartController {
     // Удалить товар из корзины
     async removeFromCart(req, res, next) {
         try {
-            console.log("Attempting to remove cart item with ID:", req.params.id); // Логирование
-            const cartItem = await Cart.findByPk(req.params.id);
+            const cartItem = await Cart.findById(req.params.id);
             if (!cartItem) {
-                console.error("Cart item not found:", req.params.id); // Логирование
                 return next(ApiError.badRequest('Товар в корзине не найден'));
             }
-            await cartItem.destroy();
+
+            await cartItem.remove();
             res.json({ message: 'Товар в корзине удален' });
         } catch (error) {
-            console.error('Ошибка при удалении товара в корзине:', error); // Логирование ошибки
+            console.error('Ошибка при удалении товара в корзине:', error);
             next(ApiError.internal('Ошибка при удалении товара в корзине'));
         }
     }

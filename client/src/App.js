@@ -54,8 +54,8 @@ const App = () => {
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/about" element={<MainSection />} />
                     <Route path="/favorites" element={<Favorite />} />
-                    <Route path="/orders" element={<OrdersPage userId={user.id}/>} />
-                    <Route path="/cart" element={<CartPage userId={user.id} />} /> 
+                    <Route path="/orders" element={<OrdersPage userId={user._id}/>} />
+                    <Route path="/cart" element={<CartPage userId={user._id} />} /> 
                     <Route path="/admin" element={<AdminPanel />} /> 
                     <Route path="/admin/users" element={<UserList />} />
                     <Route path="/admin/products" element={<ProductManagement />} />

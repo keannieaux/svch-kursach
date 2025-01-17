@@ -3,7 +3,7 @@ import './ProductCard.css';
 import { useNavigate } from 'react-router-dom';
 import imagick from '../../img/Group.png'
 
-const ProductCard = ({ id, name, price, colors = [], images = [] }) => {
+const ProductCard = ({ _id, name, price, colors = [], images = [] }) => {
   const navigate = useNavigate();
   const numericPrice = typeof price === 'number' ? price : parseFloat(price);
   const formattedPrice = !isNaN(numericPrice) ? numericPrice.toFixed(2) : 'N/A';
@@ -18,7 +18,7 @@ const ProductCard = ({ id, name, price, colors = [], images = [] }) => {
   }, [imageUrl]);
 
   const handleClick = () => {
-    navigate(`/product/${id}`);
+    navigate(`/product/${_id}`);
   };
 
   return (

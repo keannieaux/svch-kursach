@@ -20,27 +20,27 @@ export const getAllCategories = createAsyncThunk('category/getAll', async (_, { 
     }
 });
 
-export const getCategoryById = createAsyncThunk('category/getById', async (id, { rejectWithValue }) => {
+export const getCategoryById = createAsyncThunk('category/getById', async (_id, { rejectWithValue }) => {
     try {
-        const response = await CategoryService.getCategoryById(id);
+        const response = await CategoryService.getCategoryById(_id);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при получении категории");
     }
 });
 
-export const updateCategory = createAsyncThunk('category/update', async ({ id, name, image }, { rejectWithValue }) => {
+export const updateCategory = createAsyncThunk('category/update', async ({ _id, name, image }, { rejectWithValue }) => {
     try {
-        const response = await CategoryService.updateCategory(id, name, image);
+        const response = await CategoryService.updateCategory(_id, name, image);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при обновлении категории");
     }
 });
 
-export const deleteCategory = createAsyncThunk('category/delete', async (id, { rejectWithValue }) => {
+export const deleteCategory = createAsyncThunk('category/delete', async (_id, { rejectWithValue }) => {
     try {
-        const response = await CategoryService.deleteCategory(id);
+        const response = await CategoryService.deleteCategory(_id);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при удалении категории");
@@ -112,7 +112,7 @@ const categorySlice = createSlice({
             .addCase(updateCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.categories = state.categories.map(category =>
-                    category.id === action.payload.id ? action.payload : category
+                    category._id === action.payload._id ? action.payload : category
                 );
                 state.error = null;
             })
@@ -125,7 +125,7 @@ const categorySlice = createSlice({
             })
             .addCase(deleteCategory.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.categories = state.categories.filter(category => category.id !== action.meta.arg);
+                state.categories = state.categories.filter(category => category._id !== action.meta.arg);
                 state.error = null;
             })
             .addCase(deleteCategory.rejected, (state, action) => {

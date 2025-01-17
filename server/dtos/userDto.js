@@ -1,6 +1,6 @@
 module.exports = class UserDto {
     email;
-    id;
+    _id;
     firstname;
     lastname;
     roleId;
@@ -9,7 +9,7 @@ module.exports = class UserDto {
 
     constructor(model) {
         this.email = model.email;
-        this.id = model.id;
+        this._id = model._id;
         this.firstname = model.firstname;
         this.lastname = model.lastname;
         this.roleId = model.roleId;

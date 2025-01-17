@@ -14,8 +14,8 @@ export default class CartService {
         return response.data;
     }
 
-    static async removeFromCart(id) {
-        const response = await $api.delete(API_ENDPOINTS.CART.REMOVE(id));
+    static async removeFromCart(_id) {
+        const response = await $api.delete(API_ENDPOINTS.CART.REMOVE(_id));
         return response.data;
     }
 }

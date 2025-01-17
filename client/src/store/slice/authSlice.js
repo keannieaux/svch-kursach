@@ -47,7 +47,7 @@ const authSlice = createSlice({
     name: 'auth',
     initialState: {
         user: {
-            id: "",
+            _id: "",
             email: "",
             firstname: "",
             lastname: "",
@@ -84,7 +84,7 @@ const authSlice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 state.isAuth = false;
                 state.user = {
-                    id: "",
+                    _id: "",
                     email: "",
                     firstname: "",
                     lastname: "",

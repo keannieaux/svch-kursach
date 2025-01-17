@@ -21,27 +21,27 @@ export const getAllProducts = createAsyncThunk('product/getAll', async ({ page, 
 });
 
 // Асинхронное действие для получения продукта по ID
-export const getProductById = createAsyncThunk('product/getById', async (id, { rejectWithValue }) => {
+export const getProductById = createAsyncThunk('product/getById', async (_id, { rejectWithValue }) => {
   try {
-    const response = await ProductService.getProductById(id);
+    const response = await ProductService.getProductById(_id);
     return response;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || "Ошибка при получении продукта");
   }
 });
 
-export const updateProduct = createAsyncThunk('product/update', async ({ id, productData }, { rejectWithValue }) => {
+export const updateProduct = createAsyncThunk('product/update', async ({ _id, productData }, { rejectWithValue }) => {
     try {
-        const response = await ProductService.updateProduct(id, productData);
+        const response = await ProductService.updateProduct(_id, productData);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при обновлении продукта");
     }
 });
 
-export const deleteProduct = createAsyncThunk('product/delete', async (id, { rejectWithValue }) => {
+export const deleteProduct = createAsyncThunk('product/delete', async (_id, { rejectWithValue }) => {
     try {
-        const response = await ProductService.deleteProduct(id);
+        const response = await ProductService.deleteProduct(_id);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при удалении продукта");
@@ -109,7 +109,7 @@ const productSlice = createSlice({
             .addCase(updateProduct.fulfilled, (state, action) => {
                 state.isLoading = false;
                 state.products = state.products.map(product =>
-                    product.id === action.payload.id ? action.payload : product
+                    product._id === action.payload._id ? action.payload : product
                 );
                 state.error = null;
             })
@@ -122,7 +122,7 @@ const productSlice = createSlice({
             })
             .addCase(deleteProduct.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.products = state.products.filter(product => product.id !== action.meta.arg);
+                state.products = state.products.filter(product => product._id !== action.meta.arg);
                 state.error = null;
             })
             .addCase(deleteProduct.rejected, (state, action) => {

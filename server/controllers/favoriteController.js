@@ -1,39 +1,44 @@
 const { Favorite, Product, ProductImage } = require('../models/models');
 const ApiError = require('../error/ApiError');
 const { check, validationResult } = require('express-validator');
+const mongoose = require('mongoose');
 
 class FavoriteController {
     async getFavoriteByUser(req, res, next) {
         try {
-            const { page = 1, limit = 10 } = req.query; 
-            const offset = (page - 1) * limit; 
+            const { page = 1, limit = 10 } = req.query;
+            const skip = (page - 1) * limit;
 
-            const favorites = await Favorite.findAndCountAll({
-                where: { userId: req.params.userId },
-                include: [{ 
-                    model: Product,
-                    include: [ProductImage] 
-                }],
-                limit: parseInt(limit), 
-                offset: parseInt(offset)
-            });
+            const userId = req.params.userId;
 
-            const totalPages = Math.ceil(favorites.count / limit);
+            const favorites = await Favorite.find({ userId })
+                .populate({
+                    path: 'productId',
+                    populate: {
+                        path: 'images',
+                        model: 'ProductImage'
+                    }
+                })
+                .skip(skip)
+                .limit(parseInt(limit));
 
-            const favoriteProducts = favorites.rows.map(favorite => ({
-                id: favorite.id,
-                userId: favorite.userId,
-                productId: favorite.productId,
-                productName: favorite.Product.name,
-                productPrice: favorite.Product.price,
-                productImage: favorite.Product.ProductImages[0]?.url 
+            const total = await Favorite.countDocuments({ userId });
+            const totalPages = Math.ceil(total / limit);
+
+            const favoriteProducts = favorites.map(fav => ({
+                id: fav._id,
+                userId: fav.userId,
+                productId: fav.productId._id,
+                productName: fav.productId.name,
+                productPrice: fav.productId.price,
+                productImage: fav.productId.images[0]?.url || null
             }));
 
             res.json({
-                total: favorites.count,
+                total,
                 totalPages,
-                currentPage: page,
-                favorites: favoriteProducts,
+                currentPage: parseInt(page),
+                favorites: favoriteProducts
             });
         } catch (error) {
             console.error('Ошибка при выборке избранного:', error);
@@ -42,8 +47,8 @@ class FavoriteController {
     }
 
     async addFavorite(req, res, next) {
-        await check('userId').isNumeric().withMessage('ID пользователя должен быть числом').run(req);
-        await check('productId').isNumeric().withMessage('ID продукта должен быть числом').run(req);
+        await check('userId').isMongoId().withMessage('ID пользователя должен быть корректным MongoDB ObjectId').run(req);
+        await check('productId').isMongoId().withMessage('ID продукта должен быть корректным MongoDB ObjectId').run(req);
 
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -53,12 +58,14 @@ class FavoriteController {
         try {
             const { userId, productId } = req.body;
 
-            const existingFavorite = await Favorite.findOne({ where: { userId, productId } });
+            const existingFavorite = await Favorite.findOne({ userId, productId });
             if (existingFavorite) {
                 return next(ApiError.badRequest('Товар уже в избранном'));
             }
 
-            const favorite = await Favorite.create({ userId, productId });
+            const favorite = new Favorite({ userId, productId });
+            await favorite.save();
+
             res.status(201).json(favorite);
         } catch (error) {
             console.error('Ошибка при добавлении в избранное:', error);
@@ -69,16 +76,20 @@ class FavoriteController {
     async removeFavorite(req, res, next) {
         try {
             const { userId, productId } = req.params;
-            const favorite = await Favorite.findOne({ where: { userId, productId } });
-            if (!favorite) return next(ApiError.badRequest('Избранное не найдено'));
-            await favorite.destroy();
+
+            const favorite = await Favorite.findOne({ userId, productId });
+            if (!favorite) {
+                return next(ApiError.badRequest('Избранное не найдено'));
+            }
+
+            await Favorite.deleteOne({ _id: favorite._id });
+
             res.status(204).json({ message: 'Избранное успешно удалено' });
         } catch (error) {
             console.error('Ошибка при удалении избранного:', error);
             next(ApiError.internal('Ошибка при удалении избранного'));
         }
     }
-    
 }
 
 module.exports = new FavoriteController();

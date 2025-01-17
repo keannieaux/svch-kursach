@@ -12,8 +12,8 @@ const ProductList = ({ onSelectProduct }) => {
     dispatch(getAllProducts({ page: 1, limit: 100 }));
   }, [dispatch]);
 
-  const handleDelete = (id) => {
-    dispatch(deleteProduct(id));
+  const handleDelete = (_id) => {
+    dispatch(deleteProduct(_id));
   };
 
   return (
@@ -22,9 +22,9 @@ const ProductList = ({ onSelectProduct }) => {
       {isLoading && <p>Загрузка...</p>}
       <ul>
         {products.map(product => (
-          <li key={product.id}>
+          <li key={product._id}>
             <span onClick={() => onSelectProduct(product)}>{product.name}</span>
-            <button onClick={() => handleDelete(product.id)} className="delete-button">Удалить</button>
+            <button onClick={() => handleDelete(product._id)} className="delete-button">Удалить</button>
           </li>
         ))}
       </ul>

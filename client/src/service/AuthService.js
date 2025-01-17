@@ -10,7 +10,7 @@ export default class AuthService {
                 accessToken: response.data.accessToken,
                 refreshToken: response.data.refreshToken,
                 user: {
-                    id: response.data.user.id,
+                    _id: response.data.user._id,
                     email: response.data.user.email,
                     firstname: response.data.user.firstname,
                     lastname: response.data.user.lastname,
@@ -42,7 +42,7 @@ export default class AuthService {
                 accessToken: response.data.accessToken,
                 refreshToken: response.data.refreshToken,
                 user: {
-                    id: response.data.user.id,
+                    _id: response.data.user._id,
                     email: response.data.user.email,
                     firstname: response.data.user.firstname,
                     lastname: response.data.user.lastname,

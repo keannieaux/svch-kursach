@@ -22,9 +22,9 @@ export const getCartItems = createAsyncThunk('cart/getAll', async (userId, { rej
     }
 });
 
-export const removeFromCart = createAsyncThunk('cart/remove', async (id, { rejectWithValue }) => {
+export const removeFromCart = createAsyncThunk('cart/remove', async (_id, { rejectWithValue }) => {
     try {
-        const response = await CartService.removeFromCart(id);
+        const response = await CartService.removeFromCart(_id);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при удалении из корзины");
@@ -62,7 +62,7 @@ const cartSlice = createSlice({
             })
             .addCase(addToCart.fulfilled, (state, action) => {
                 state.isLoading = false;
-                const existingItem = state.items.find(item => item.id === action.payload.id);
+                const existingItem = state.items.find(item => item._id === action.payload._id);
                 if (existingItem) {
                     existingItem.quantity += action.payload.quantity; // Обновляем количество
                 } else {
@@ -91,7 +91,7 @@ const cartSlice = createSlice({
             })
             .addCase(removeFromCart.fulfilled, (state, action) => {
                 state.isLoading = false;
-                state.items = state.items.filter(item => item.id !== action.meta.arg);
+                state.items = state.items.filter(item => item._id !== action.meta.arg);
                 state.error = null;
             })
             .addCase(removeFromCart.rejected, (state, action) => {

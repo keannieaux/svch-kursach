@@ -49,7 +49,7 @@ const UserProfile = () => {
     console.log(`Updating ${field} with value:`, userData);
 
     dispatch(updateUser({
-      userId: user.id,
+      userId: user._id,
       userData
     }))
     .unwrap()

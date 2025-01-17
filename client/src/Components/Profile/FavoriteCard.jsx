@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import imagecolor from '../../img/Rectangle.png';
 import imagerec from '../../img/X.png';
 
-const FavoriteCard = ({ id, name, price, images = [], onRemove }) => {
+const FavoriteCard = ({ _id, name, price, images = [], onRemove }) => {
   const navigate = useNavigate();
   const numericPrice = typeof price === 'number' ? price : parseFloat(price);
   const formattedPrice = !isNaN(numericPrice) ? numericPrice.toFixed(2) : 'N/A';
@@ -16,12 +16,12 @@ const FavoriteCard = ({ id, name, price, images = [], onRemove }) => {
   };
 
   const handleClick = () => {
-    navigate(`/product/${id}`);
+    navigate(`/product/${_id}`);
   };
 
   const handlePurchase = (e) => {
     e.stopPropagation();
-    navigate(`/product/${id}`);
+    navigate(`/product/${_id}`);
   };
 
   return (
@@ -33,7 +33,7 @@ const FavoriteCard = ({ id, name, price, images = [], onRemove }) => {
             className="remove-button"
             onClick={(e) => {
               e.stopPropagation(); // Остановка всплытия события клика
-              onRemove(id);
+              onRemove(_id);
             }}
           >
             <img src={imagerec} className="car-image" alt="Remove" />

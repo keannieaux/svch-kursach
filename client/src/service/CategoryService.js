@@ -22,19 +22,19 @@ export default class CategoryService {
         }
     
 
-    static async getCategoryById(id) {
-        const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ONE(id));
+    static async getCategoryById(_id) {
+        const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ONE(_id));
         return response.data;
     }
 
-    static async updateCategory(id, name, image) {
+    static async updateCategory(_id, name, image) {
         const formData = new FormData();
         formData.append('name', name);
         if (image) {
             formData.append('image', image);
         }
 
-        const response = await $api.put(API_ENDPOINTS.CATEGORY.UPDATE(id), formData, {
+        const response = await $api.put(API_ENDPOINTS.CATEGORY.UPDATE(_id), formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
             }
@@ -42,8 +42,8 @@ export default class CategoryService {
         return response.data;
     }
 
-    static async deleteCategory(id) {
-        const response = await $api.delete(API_ENDPOINTS.CATEGORY.DELETE(id));
+    static async deleteCategory(_id) {
+        const response = await $api.delete(API_ENDPOINTS.CATEGORY.DELETE(_id));
         return response.data;
     }
 }

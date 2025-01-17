@@ -52,7 +52,7 @@ const ProductAddForm = () => {
       <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
         <option value="">Выберите категорию</option>
         {categories.map(category => (
-          <option key={category.id} value={category.id}>{category.name}</option>
+          <option key={category._id} value={category._id}>{category.name}</option>
         ))}
       </select>
       <input type="file" multiple onChange={handleImageChange} />

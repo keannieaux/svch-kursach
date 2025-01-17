@@ -16,8 +16,8 @@ const OrdersPage = () => {
   const orderError = useSelector(state => state.order.error);
 
   useEffect(() => {
-    if (user && user.id) {
-      dispatch(getOrders(user.id));
+    if (user && user._id) {
+      dispatch(getOrders(user._id));
     }
   }, [dispatch, user]);
 
@@ -50,9 +50,9 @@ const OrdersPage = () => {
                 order.items.map(item => {
                   console.log("Order item data:", item);
                   return (
-                    <div key={item.id} className="order-item">
+                    <div key={item._id} className="order-item">
                       <OrderCard
-                        id={order.id}
+                        _id={order._id}
                         name={item.productName}
                         price={item.productPrice}
                         size={item.size || 'N/A'}

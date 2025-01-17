@@ -55,7 +55,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUserRole.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.users.rows.findIndex(user => user.id === action.payload.id);
+        const index = state.users.rows.findIndex(user => user._id === action.payload._id);
         if (index !== -1) {
           state.users.rows[index] = action.payload;
         }
@@ -70,7 +70,7 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.isLoading = false;
-        const index = state.users.rows.findIndex(user => user.id === action.payload.id);
+        const index = state.users.rows.findIndex(user => user._id === action.payload._id);
         if (index !== -1) {
           state.users.rows[index] = action.payload;
         }

@@ -1,35 +1,35 @@
 const { ProductImage } = require('../models/models');
 const ApiError = require('../error/ApiError');
+const mongoose = require('mongoose');
 
 class ProductImageController {
-    // Получить все изображения продуктов с пагинацией
     async getAllProductImages(req, res, next) {
         try {
-            const { page = 1, limit = 10 } = req.query; 
-            const offset = (page - 1) * limit; 
+            const { page = 1, limit = 10 } = req.query;
+            const skip = (page - 1) * limit;
 
-            const productImages = await ProductImage.findAndCountAll({
-                limit: parseInt(limit), 
-                offset: parseInt(offset), 
-            });
+            const productImages = await ProductImage.find()
+                .skip(skip)
+                .limit(parseInt(limit))
+                .exec();
 
-            const totalPages = Math.ceil(productImages.count / limit); 
+            const total = await ProductImage.countDocuments();
+            const totalPages = Math.ceil(total / limit);
 
             res.json({
-                total: productImages.count,
+                total,
                 totalPages,
-                currentPage: page,
-                productImages: productImages.rows,
+                currentPage: parseInt(page),
+                productImages
             });
         } catch (error) {
             next(ApiError.internal('Ошибка при выборке изображений продуктов'));
         }
     }
 
-    // Получить изображение по ID
     async getProductImageById(req, res, next) {
         try {
-            const productImage = await ProductImage.findByPk(req.params.id);
+            const productImage = await ProductImage.findById(req.params.id).exec();
             if (!productImage) {
                 return next(ApiError.badRequest('Изображение продукта не найдено'));
             }
@@ -39,45 +39,44 @@ class ProductImageController {
         }
     }
 
-    // Создать изображение продукта
     async createProductImage(req, res, next) {
         try {
             const { url } = req.body;
 
-            const existingImage = await ProductImage.findOne({ where: { url } });
+            const existingImage = await ProductImage.findOne({ url }).exec();
             if (existingImage) {
                 return next(ApiError.badRequest('Изображение с таким URL уже существует'));
             }
 
-            const newProductImage = await ProductImage.create({ url });
+            const newProductImage = new ProductImage({ url });
+            await newProductImage.save();
             res.status(201).json(newProductImage);
         } catch (error) {
             next(ApiError.internal('Ошибка создания изображения продукта'));
         }
     }
 
-    // Обновить изображение продукта
     async updateProductImage(req, res, next) {
         try {
-            const productImage = await ProductImage.findByPk(req.params.id);
+            const productImage = await ProductImage.findById(req.params.id).exec();
             if (!productImage) {
                 return next(ApiError.badRequest('Изображение продукта не найдено'));
             }
-            await productImage.update(req.body);
+            Object.assign(productImage, req.body);
+            await productImage.save();
             res.json(productImage);
         } catch (error) {
             next(ApiError.internal('Ошибка при обновлении изображения продукта'));
         }
     }
 
-    // Удалить изображение продукта
     async deleteProductImage(req, res, next) {
         try {
-            const productImage = await ProductImage.findByPk(req.params.id);
+            const productImage = await ProductImage.findById(req.params.id).exec();
             if (!productImage) {
                 return next(ApiError.badRequest('Изображение продукта не найдено'));
             }
-            await productImage.destroy();
+            await productImage.remove();
             res.json({ message: 'Изображение продукта удалено' });
         } catch (error) {
             next(ApiError.internal('Ошибка при удалении изображения продукта'));

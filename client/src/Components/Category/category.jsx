@@ -33,10 +33,10 @@ const CategoryGrid = () => {
       <div className="category-grid">
         {categories.map((category) => (
           <CategoryCard
-            key={category.id}
+            key={category._id}
             title={category.name}
             image={category.image}
-            onClick={() => handleCategoryClick(category.id)}
+            onClick={() => handleCategoryClick(category._id)}
           />
         ))}
       </div>

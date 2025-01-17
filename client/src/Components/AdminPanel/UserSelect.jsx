@@ -30,7 +30,7 @@ const UserSelect = ({ selectedUserId, onSelectUser }) => {
     <select value={selectedUserId} onChange={e => onSelectUser(e.target.value)}>
       <option value="">Select User</option>
       {users.rows.map(user => (
-        <option key={user.id} value={user.id}>
+        <option key={user._id} value={user._id}>
           {user.email}
         </option>
       ))}

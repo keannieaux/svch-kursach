@@ -3,7 +3,7 @@ import './OrderCard.css';
 import { useNavigate } from 'react-router-dom';
 import orderImage from '../../img/Rectangle.png';
 
-const OrderCard = ({ id, name, price, size, status, images = [] }) => {
+const OrderCard = ({ _id, name, price, size, status, images = [] }) => {
   const navigate = useNavigate();
   const numericPrice = price ? (typeof price === 'number' ? price : parseFloat(price)) : null;
   const formattedPrice = numericPrice !== null && !isNaN(numericPrice) ? numericPrice.toFixed(2) : 'N/A';

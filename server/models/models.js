@@ -1,135 +1,103 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../db');
+const mongoose = require('mongoose');
+const { Schema, model, Types } = mongoose;
 
-// Модель пользователя
-const User = sequelize.define('User', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  firstname: { type: DataTypes.STRING, allowNull: false },
-  lastname: { type: DataTypes.STRING, allowNull: false },
-  email: { type: DataTypes.STRING, allowNull: false, unique: true },
-  password: { type: DataTypes.STRING, allowNull: false },
-  delivery_address: { type: DataTypes.STRING },
-  phone_number: { type: DataTypes.STRING },
-}, {
-  hooks: {
-    async beforeCreate(user) {
-      const defaultRole = await Role.findOne({ where: { name: 'customer' } });
-      if (defaultRole) {
-        user.roleId = defaultRole.id;
-      } else {
-        throw new Error('Роль "customer" не найдена');
-      }
+// Схема роли
+const RoleSchema = new Schema({
+  name: { type: String, required: true }
+});
+const Role = model('Role', RoleSchema);
+
+// Схема пользователя
+const UserSchema = new Schema({
+  firstname: { type: String, required: true },
+  lastname: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
+  delivery_address: { type: String },
+  phone_number: { type: String },
+  role: { type: Types.ObjectId, ref: 'Role' }
+});
+
+// Хук для назначения роли по умолчанию
+UserSchema.pre('save', async function (next) {
+  if (!this.role) {
+    const defaultRole = await Role.findOne({ name: 'customer' });
+    if (defaultRole) {
+      this.role = defaultRole._id;
+    } else {
+      throw new Error('Роль "customer" не найдена');
     }
   }
+  next();
 });
 
-// Модель рефреш-токена
-const Refresh_Token = sequelize.define('Refresh_Token', {
-  id_user: { type: DataTypes.INTEGER, allowNull: false, references: { model: User, key: 'id' }},
-  refresh_token: { type: DataTypes.TEXT, allowNull: false },
+const User = model('User', UserSchema);
+
+// Схема рефреш-токена
+const RefreshTokenSchema = new Schema({
+  user: { type: Types.ObjectId, ref: 'User', required: true },
+  refresh_token: { type: String, required: true }
 });
+const Refresh_Token = model('Refresh_Token', RefreshTokenSchema);
 
-// Модель роли
-const Role = sequelize.define('Role', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
+// Схема категории
+const CategorySchema = new Schema({
+  name: { type: String, required: true },
+  image: { type: String }
 });
+const Category = model('Category', CategorySchema);
 
-// Модель категории
-const Category = sequelize.define('Category', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
-  image: { type: DataTypes.STRING },
+// Схема товара
+const ProductSchema = new Schema({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  price: { type: Number, required: true },
+  stock: { type: Number, required: true },
+  size: [{ type: Number }],
+  category: { type: Types.ObjectId, ref: 'Category' }
 });
+const Product = model('Product', ProductSchema);
 
-// Модель товара
-const Product = sequelize.define('Product', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  name: { type: DataTypes.STRING, allowNull: false },
-  description: { type: DataTypes.STRING, allowNull: false },
-  price: { type: DataTypes.DECIMAL, allowNull: false },
-  stock: { type: DataTypes.INTEGER, allowNull: false },
-  size: { type: DataTypes.ARRAY(DataTypes.INTEGER) },
+// Схема изображения товара
+const ProductImageSchema = new Schema({
+  url: { type: String, required: true },
+  product: { type: Types.ObjectId, ref: 'Product' }
 });
+const ProductImage = model('ProductImage', ProductImageSchema);
 
-// Модель изображения товара
-const ProductImage = sequelize.define('ProductImage', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  url: { type: DataTypes.STRING, allowNull: false },
+// Схема корзины
+const CartSchema = new Schema({
+  user: { type: Types.ObjectId, ref: 'User' },
+  product: { type: Types.ObjectId, ref: 'Product' },
+  quantity: { type: Number, required: true },
+  size: { type: Number }
 });
+const Cart = model('Cart', CartSchema);
 
-// Модель корзины
-const Cart = sequelize.define('Cart', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  quantity: { type: DataTypes.INTEGER, allowNull: false },
-  size: { type: DataTypes.INTEGER },
+// Схема избранного
+const FavoriteSchema = new Schema({
+  user: { type: Types.ObjectId, ref: 'User' },
+  product: { type: Types.ObjectId, ref: 'Product' }
 });
+const Favorite = model('Favorite', FavoriteSchema);
 
-// Модель избранного
-const Favorite = sequelize.define('Favorite', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+// Схема заказа
+const OrderSchema = new Schema({
+  user: { type: Types.ObjectId, ref: 'User' },
+  total_price: { type: Number, required: true },
+  status: { type: String, default: 'Pending' }
 });
+const Order = model('Order', OrderSchema);
 
-// Модель заказа
-const Order = sequelize.define('Order', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  total_price: { type: DataTypes.DECIMAL, allowNull: false },
-  status: { type: DataTypes.STRING, defaultValue: 'Pending' }, 
+// Схема товара в заказе
+const OrderItemSchema = new Schema({
+  order: { type: Types.ObjectId, ref: 'Order' },
+  product: { type: Types.ObjectId, ref: 'Product' },
+  quantity: { type: Number, required: true },
+  size: { type: Number },
+  price: { type: Number, required: true }
 });
-
-// Модель товара в заказе
-const OrderItem = sequelize.define('OrderItem', {
-  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  quantity: { type: DataTypes.INTEGER, allowNull: false },
-  size: { type: DataTypes.INTEGER },
-  price: { type: DataTypes.DECIMAL, allowNull: false },
-});
-
-// Связи
-
-// Пользователи и роли
-User.belongsTo(Role, { foreignKey: 'roleId' });
-Role.hasMany(User, { foreignKey: 'roleId' });
-
-// Категории и товары
-Category.hasMany(Product, { foreignKey: 'categoryId' });
-Product.belongsTo(Category, { foreignKey: 'categoryId' });
-
-// Товары и изображения
-Product.hasMany(ProductImage, { foreignKey: 'productId' });
-ProductImage.belongsTo(Product, { foreignKey: 'productId' });
-
-// Корзина и пользователь
-User.hasMany(Cart, { foreignKey: 'userId' });
-Cart.belongsTo(User, { foreignKey: 'userId' });
-
-// Корзина и товары
-Cart.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(Cart, { foreignKey: 'productId' });
-
-// Избранное и пользователь
-User.hasMany(Favorite, { foreignKey: 'userId' });
-Favorite.belongsTo(User, { foreignKey: 'userId' });
-
-// Избранное и товары
-Favorite.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(Favorite, { foreignKey: 'productId' });
-
-// Заказы и пользователь
-Order.belongsTo(User, { foreignKey: 'userId' });
-User.hasMany(Order, { foreignKey: 'userId' });
-
-// Заказы и товары
-Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
-
-// Товары в заказе
-OrderItem.belongsTo(Product, { foreignKey: 'productId' });
-Product.hasMany(OrderItem, { foreignKey: 'productId' });
-
-// Пользователи и рефреш-токены
-User.hasOne(Refresh_Token, { foreignKey: 'id_user', sourceKey: 'id' });
-Refresh_Token.belongsTo(User, { foreignKey: 'id_user', targetKey: 'id' });
+const OrderItem = model('OrderItem', OrderItemSchema);
 
 module.exports = {
   User,

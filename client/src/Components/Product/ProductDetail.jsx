@@ -9,17 +9,17 @@ import heart from '../../img/heart.png';
 import imagick from '../../img/Group.png'
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { _id } = useParams();
   const dispatch = useDispatch();
   const { product, isLoading, error } = useSelector(state => state.product);
   const { user } = useSelector(state => state.auth); // Получаем информацию о пользователе из состояния auth
   const [selectedSize, setSelectedSize] = useState(null);
 
   useEffect(() => {
-    if (id) {
-      dispatch(getProductById(id));
+    if (_id) {
+      dispatch(getProductById(_id));
     }
-  }, [dispatch, id]);
+  }, [dispatch, _id]);
 
   useEffect(() => {
     if (product && product.images) {
@@ -49,8 +49,8 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (selectedSize) {
       dispatch(addToCart({
-        userId: user.id, 
-        productId: id,
+        userId: user._id, 
+        productId: _id,
         quantity: 1,
         size: selectedSize
       }));
@@ -61,8 +61,8 @@ const ProductDetail = () => {
   };
 
   const handleAddToFavorites = () => {
-    if (user && id) {
-        const favoriteData = { userId: user.id, productId: id };
+    if (user && _id) {
+        const favoriteData = { userId: user._id, productId: _id };
         console.log("Adding to favorites:", favoriteData);
         dispatch(addToFavorites(favoriteData));
         window.location.reload(); 
