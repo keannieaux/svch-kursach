@@ -48,7 +48,7 @@ const ProductUpdateForm = ({ product }) => {
     console.log('Form Data:', formData);
 
     if (product) {
-      dispatch(updateProduct({ _id: product._id, productData: formData }));
+      dispatch(updateProduct({ _id: product.id, productData: formData }));
     }
   };
 

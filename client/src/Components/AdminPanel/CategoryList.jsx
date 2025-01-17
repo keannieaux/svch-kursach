@@ -54,9 +54,9 @@ const CategoryList = () => {
       <h3>Список категорий</h3>
       <ul>
         {categories.map(category => (
-          <li key={category._id}>
-            <span onClick={() => handleCategoryClick(category._id)}>{category.name}</span>
-            <button onClick={() => handleDelete(category._id)} className="delete-button">Удалить</button>
+          <li key={category.id}>
+            <span onClick={() => handleCategoryClick(category.id)}>{category.name}</span>
+            <button onClick={() => handleDelete(category.id)} className="delete-button">Удалить</button>
           </li>
         ))}
       </ul>

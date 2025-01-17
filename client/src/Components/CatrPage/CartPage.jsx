@@ -39,7 +39,7 @@ const CartPage = ({ userId }) => {
     };
 
     const handlePurchase = (_id) => {
-        const item = cartItems.find((item) => item._id === _id);
+        const item = cartItems.find((item) => item.id === _id);
         if (item) {
             const orderItems = [{
                 productId: item.productId,
@@ -47,7 +47,7 @@ const CartPage = ({ userId }) => {
                 size: item.size
             }];
             dispatch(addOrder({ userId, items: orderItems }));
-            dispatch(removeFromCart(item._id));
+            dispatch(removeFromCart(item.id));
             window.location.reload(); 
         }
     };
@@ -60,7 +60,7 @@ const CartPage = ({ userId }) => {
         }));
 
         dispatch(addOrder({ userId, items: orderItems }));
-        orderItems.forEach(item => dispatch(removeFromCart(item._id)));
+        orderItems.forEach(item => dispatch(removeFromCart(item.id)));
     };
 
     if (cartStatus === 'loading') {
@@ -94,8 +94,8 @@ const CartPage = ({ userId }) => {
             ) : (
                 cartItems.map((item) => (
                     <CartProductCard
-                        key={item._id}
-                        _id={item._id}
+                        key={item.id}
+                        _id={item.id}
                         name={item.Product.name || "Нет названия"}
                         price={parseFloat(item.Product.price) || 0}
                         size={item.size}

@@ -16,8 +16,8 @@ const Favorite = () => {
   const favorites = useSelector(state => state.favorite.items);
 
   useEffect(() => {
-    if (user && user._id) {
-      dispatch(getFavorites(user._id));
+    if (user && user.id) {
+      dispatch(getFavorites(user.id));
     }
   }, [dispatch, user]);
 
@@ -30,12 +30,12 @@ const Favorite = () => {
   };
 
   const handleRemoveFavorite = (productId) => {
-    dispatch(removeFromFavorites({ userId: user._id, productId }));
+    dispatch(removeFromFavorites({ userId: user.id, productId }));
   };
 
   const handlePurchase = (productId) => {
     dispatch(addToCart({
-      userId: user._id,
+      userId: user.id,
       productId,
       quantity: 1,
       size: 'M' 
@@ -56,9 +56,9 @@ const Favorite = () => {
               <p>You have no favorite products.</p>
             ) : (
               favorites.map(favorite => (
-                <div key={favorite._id} className="favorite-item">
+                <div key={favorite.id} className="favorite-item">
                   <FavoriteCard
-                    _id={favorite.productId || favorite._id}
+                    _id={favorite.productId || favorite.id}
                     name={favorite.productName || "Без названия"}
                     price={favorite.productPrice || 0}
                     colors={favorite.productColors || []}

@@ -19,9 +19,9 @@ const UserProfile = () => {
   const [updateError, setUpdateError] = useState(null);
   const [phoneError, setPhoneError] = useState(null);
 
-      // Добавьте соответствующие идентификаторы ролей
-      const CUSTOMER_ROLE_ID = 1; // ID роли "customer"
-      const ADMIN_ROLE_ID = 2;    // ID роли "ADMIN"
+  // Обновленные идентификаторы ролей
+  const CUSTOMER_ROLE_ID = '6789df578f836b8220e12936'; // ID роли "customer"
+    const ADMIN_ROLE_ID = '6789df628f836b8220e12939';     // ID роли "ADMIN"
 
   const handleLogout = () => {
     dispatch(logout());

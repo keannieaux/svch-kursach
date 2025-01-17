@@ -104,10 +104,10 @@ class UserController {
 
     async updateUserRole(req, res, next) {
         try {
-            const { _id } = req.params;
+            const { id } = req.params;
             const { roleId } = req.body;
 
-            console.log(`Updating role for user with ID: ${_id}`);
+            console.log(`Updating role for user with ID: ${id}`);
             console.log(`Received role ID: ${roleId}`);
 
             if (!roleId) {
@@ -115,7 +115,7 @@ class UserController {
                 return res.status(400).json({ message: "Роль не может быть пустой" });
             }
 
-            const user = await User.findById(_id);
+            const user = await User.findById(id);
             if (!user) {
                 console.log("User not found");
                 return res.status(404).json({ message: "Пользователь не найден" });
@@ -141,13 +141,13 @@ class UserController {
                 return res.status(400).json({ errors: errors.array() });
             }
 
-            const { _id } = req.params;
+            const { id } = req.params;
             const { email, firstname, lastname, delivery_address, phone_number } = req.body;
 
-            console.log(`Updating user with ID: ${_id}`);
+            console.log(`Updating user with ID: ${id}`);
             console.log(`Received data: ${JSON.stringify(req.body)}`);
 
-            const user = await User.findById(_id);
+            const user = await User.findById(id);
             if (!user) {
                 console.log("User not found");
                 return res.status(404).json({ message: "Пользователь не найден" });

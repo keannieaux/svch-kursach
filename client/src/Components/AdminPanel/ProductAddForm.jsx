@@ -26,7 +26,12 @@ const ProductAddForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
+    if (!categoryId || categoryId.length !== 24) {
+      alert('Некорректный идентификатор категории');
+      return;
+    }
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
@@ -37,19 +42,19 @@ const ProductAddForm = () => {
     newImages.forEach((image) => {
       formData.append('images', image);
     });
-    
+
     dispatch(createProduct(formData));
   };
-  
+
   return (
     <form onSubmit={handleSubmit} className='inputiki1'>
       <h3>Добавить новый продукт</h3>
-      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" />
-      <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Описание" />
-      <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Цена" />
-      <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="Количество" />
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" required />
+      <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Описание" required />
+      <input type="number" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="Цена" required />
+      <input type="number" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="Количество" required />
       <input type="text" value={size} onChange={(e) => setSize(e.target.value)} placeholder="Размер" />
-      <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)}>
+      <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
         <option value="">Выберите категорию</option>
         {categories.map(category => (
           <option key={category._id} value={category._id}>{category.name}</option>

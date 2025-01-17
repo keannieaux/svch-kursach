@@ -49,7 +49,7 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     if (selectedSize) {
       dispatch(addToCart({
-        userId: user._id, 
+        userId: user.id, 
         productId: _id,
         quantity: 1,
         size: selectedSize
@@ -62,7 +62,7 @@ const ProductDetail = () => {
 
   const handleAddToFavorites = () => {
     if (user && _id) {
-        const favoriteData = { userId: user._id, productId: _id };
+        const favoriteData = { userId: user.id, productId: _id };
         console.log("Adding to favorites:", favoriteData);
         dispatch(addToFavorites(favoriteData));
         window.location.reload(); 

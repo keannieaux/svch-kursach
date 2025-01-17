@@ -45,22 +45,22 @@ const UserList = () => {
           </thead>
           <tbody>
             {users.rows.map(user => (
-              <tr key={user._id}>
-                <td data-label="ID">{user._id}</td>
+              <tr key={user.id}>
+                <td data-label="ID">{user.id}</td>
                 <td data-label="Email">{user.email}</td>
                 <td data-label="First Name">{user.firstname}</td>
                 <td data-label="Last Name">{user.lastname}</td>
                 <td data-label="Role">
                   <select
-                    value={selectedRole[user._id] || user.roleId}
-                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                    value={selectedRole[user.id] || user.roleId}
+                    onChange={(e) => handleRoleChange(user.id, e.target.value)}
                   >
                     <option value="1">Customer</option>
                     <option value="2">Admin</option>
                   </select>
                 </td>
                 <td data-label="Action">
-                  <button onClick={() => handleChangeRole(user._id)}>Update Role</button>
+                  <button onClick={() => handleChangeRole(user.id)}>Update Role</button>
                 </td>
               </tr>
             ))}

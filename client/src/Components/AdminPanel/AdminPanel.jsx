@@ -49,7 +49,7 @@ const AdminPanel = () => {
     }
 
     console.log("Selected User ID:", selectedUserId);
-    const selectedUser = users.rows.find(user => user._id === Number(selectedUserId));
+    const selectedUser = users.rows.find(user => user.id === Number(selectedUserId));
 
     if (!selectedUser) {
       console.error("Selected user not found");
@@ -99,7 +99,7 @@ const AdminPanel = () => {
     }
 
     console.log("Selected User ID:", selectedUserId);
-    const selectedUser = users.rows.find(user => user._id === Number(selectedUserId));
+    const selectedUser = users.rows.find(user => user.id === Number(selectedUserId));
 
     if (!selectedUser) {
       console.error("Selected user not found");
@@ -121,7 +121,7 @@ const AdminPanel = () => {
     const rows = orders.map(order => {
       console.log("Order data:", order); // Логирование данных заказа
       return order.items.map(item => [
-        order._id,
+        order.id,
         item.productName,
         item.quantity,
         item.productPrice

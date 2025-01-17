@@ -4,7 +4,7 @@ const { Refresh_Token } = require("../models/models");  // Убедитесь, �
 class TokenService {
 
     // Генерация токенов
-    generateToken(payload) {
+    generateTokens(payload) { // Убедитесь, что используется правильное имя функции
         const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET, { expiresIn: '30m' });
         const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET, { expiresIn: '10d' });
         return {
@@ -34,13 +34,13 @@ class TokenService {
     }
 
     // Сохранение Refresh токена
-    async saveToken(user_id, refreshToken) {
+    async saveToken(userId, refreshToken) {
         try {
-            console.log("Saving token for user_id:", user_id);
+            console.log("Saving token for userId:", userId);
             console.log("Refresh Token:", refreshToken);
 
             // Находим или создаем новый документ в MongoDB для токенов
-            const tokenData = await Refresh_Token.findOne({ user_id: user_id });
+            const tokenData = await Refresh_Token.findOne({ user: userId });
 
             if (tokenData) {
                 console.log("Updating existing token");
@@ -48,11 +48,12 @@ class TokenService {
                 await tokenData.save();
             } else {
                 console.log("Creating new token");
-                const newTokenData = new Refresh_Token({ user_id: user_id, refresh_token: refreshToken });
+                const newTokenData = new Refresh_Token({ user: userId, refresh_token: refreshToken });
                 await newTokenData.save(); // Создаем новый документ с токеном
             }
         } catch (error) {
             console.error("Error saving token:", error);
+            throw error;
         }
     }
 
@@ -63,6 +64,7 @@ class TokenService {
             return tokenData;
         } catch (error) {
             console.error("Error removing token:", error);
+            throw error;
         }
     }
 
@@ -76,6 +78,7 @@ class TokenService {
             return tokenData;
         } catch (error) {
             console.error("Error finding token:", error);
+            throw error;
         }
     }
 

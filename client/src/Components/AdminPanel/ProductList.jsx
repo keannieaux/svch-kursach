@@ -22,9 +22,9 @@ const ProductList = ({ onSelectProduct }) => {
       {isLoading && <p>Загрузка...</p>}
       <ul>
         {products.map(product => (
-          <li key={product._id}>
+          <li key={product.id}>
             <span onClick={() => onSelectProduct(product)}>{product.name}</span>
-            <button onClick={() => handleDelete(product._id)} className="delete-button">Удалить</button>
+            <button onClick={() => handleDelete(product.id)} className="delete-button">Удалить</button>
           </li>
         ))}
       </ul>
