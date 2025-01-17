@@ -79,28 +79,31 @@ class UserController {
         try {
             const { page = 1, limit = 10 } = req.query;
             const skip = (page - 1) * limit;
-
-            const users = await User.find({ roleId: { $ne: 2 } })  // Пропускаем пользователей с ролью 2 (например, владельцы)
+    
+            const users = await User.find({ role: { $ne: new ObjectId("6123ab4cd1234ab123456789") } })
                 .skip(skip)
                 .limit(parseInt(limit))
-                .populate('roleId', 'name') // Включаем модель Role
+                .populate('role', 'name')
                 .exec();
-
-            const total = await User.countDocuments({ roleId: { $ne: 2 } });
-
+    
+            const total = await User.countDocuments({ role: { $ne: new ObjectId("6123ab4cd1234ab123456789") } });
+    
             const totalPages = Math.ceil(total / limit);
-
+    
+            console.log('Fetched users:', users);
+    
             return res.json({
+                rows: users, // Возвращаем пользователей в свойстве rows
                 total,
                 totalPages,
-                currentPage: page,
-                users,
+                currentPage: page
             });
         } catch (e) {
             console.error(e);
             next(ApiError.internal(e.message));
         }
     }
+    
 
     async updateUserRole(req, res, next) {
         try {
@@ -121,7 +124,7 @@ class UserController {
                 return res.status(404).json({ message: "Пользователь не найден" });
             }
 
-            user.roleId = roleId;
+            user.role = new ObjectId(roleId);  // Преобразуем roleId в ObjectId перед сохранением
             await user.save();
 
             console.log('User role updated successfully:', user);

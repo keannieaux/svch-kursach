@@ -1,22 +1,39 @@
 const { Product, ProductImage } = require('../models/models');
 const ApiError = require('../error/ApiError');
-const path = require('path');
-const fs = require('fs');
-const uuid = require('uuid');
 const mongoose = require('mongoose');
+const uuid = require('uuid');
+const path = require('path');
 
 class ProductController {
+
     async getAllProduct(req, res, next) {
         try {
             const { page = 1, limit = 10, categoryId } = req.query;
             const skip = (page - 1) * limit;
-            const filter = categoryId ? { categoryId: mongoose.Types.ObjectId(categoryId) } : {};
+            let filter = {};
+
+            if (categoryId) {
+                if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+                    return next(ApiError.badRequest('Некорректный идентификатор категории'));
+                }
+                filter.category = new mongoose.Types.ObjectId(categoryId);
+            }
+
+            console.log('Fetching products with filter:', filter);
+            console.log('Pagination - skip:', skip, 'limit:', limit);
 
             const products = await Product.find(filter)
-                .populate('images')
                 .skip(skip)
                 .limit(parseInt(limit))
                 .exec();
+
+            console.log('Fetched products:', products);
+
+            // Получаем изображения для каждого товара
+            for (const product of products) {
+                const images = await ProductImage.find({ product: product._id }).exec();
+                product.images = images;
+            }
 
             const total = await Product.countDocuments(filter);
             const totalPages = Math.ceil(total / limit);
@@ -28,23 +45,38 @@ class ProductController {
                 products
             });
         } catch (error) {
-            next(ApiError.internal('Ошибка при получении товаров'));
+            console.error('Ошибка при получении товаров:', error);
+            next(ApiError.internal('Ошибка при получении товаров: ' + error.message));
         }
     }
 
-    async getProductById(req, res, next) {
-        try {
-            const product = await Product.findById(req.params.id).populate('images').exec();
-            if (!product) return next(ApiError.badRequest('Товар не найден'));
-            res.json(product);
-        } catch (error) {
-            next(ApiError.internal('Ошибка при получении товара'));
+        async getProductById(req, res, next) {
+            try {
+                const { id } = req.params;
+                console.log('Получение продукта с идентификатором:', id);
+    
+                // Проверка формата идентификатора
+                if (!mongoose.Types.ObjectId.isValid(id)) {
+                    console.error('Некорректный идентификатор продукта:', id);
+                    return next(ApiError.badRequest('Некорректный идентификатор продукта'));
+                }
+    
+                const product = await Product.findById(id).populate('images').exec();
+                if (!product) return next(ApiError.badRequest('Товар не найден'));
+                res.json(product);
+            } catch (error) {
+                next(ApiError.internal('Ошибка при получении товара'));
+            }
         }
-    }
+
 
     async createProduct(req, res, next) {
         try {
             const { name, description, price, stock, size, categoryId } = req.body;
+
+            if (!mongoose.Types.ObjectId.isValid(categoryId)) {
+                return next(ApiError.badRequest('Некорректный идентификатор категории'));
+            }
 
             const existingProduct = await Product.findOne({ name });
             if (existingProduct) {
@@ -59,7 +91,7 @@ class ProductController {
                 price,
                 stock,
                 size: sizeArray,
-                categoryId: mongoose.Types.ObjectId(categoryId)
+                category: new mongoose.Types.ObjectId(categoryId)
             });
 
             await product.save();
@@ -74,7 +106,7 @@ class ProductController {
 
                     await image.mv(filePath);
 
-                    const imageDoc = new ProductImage({ url: fileName, productId: product._id });
+                    const imageDoc = new ProductImage({ url: fileName, product: product._id });
                     await imageDoc.save();
                     imageDocs.push(imageDoc._id);
                 }
@@ -83,7 +115,9 @@ class ProductController {
                 await product.save();
             }
 
-            const newProduct = await Product.findById(product._id).populate('images').exec();
+            const newProduct = await Product.findById(product._id).exec();
+            const images = await ProductImage.find({ product: newProduct._id }).exec();
+            newProduct.images = images;
 
             res.json(newProduct);
         } catch (error) {
@@ -106,12 +140,12 @@ class ProductController {
             product.price = price || product.price;
             product.stock = stock || product.stock;
             product.size = sizeArray;
-            product.categoryId = categoryId ? mongoose.Types.ObjectId(categoryId) : product.categoryId;
+            product.category = categoryId ? new mongoose.Types.ObjectId(categoryId) : product.category;
 
             await product.save();
 
             if (req.files && req.files.images) {
-                await ProductImage.deleteMany({ productId: product._id });
+                await ProductImage.deleteMany({ product: product._id });
 
                 const images = Array.isArray(req.files.images) ? req.files.images : [req.files.images];
                 const imageDocs = [];
@@ -122,7 +156,7 @@ class ProductController {
 
                     await image.mv(filePath);
 
-                    const imageDoc = new ProductImage({ url: fileName, productId: product._id });
+                    const imageDoc = new ProductImage({ url: fileName, product: product._id });
                     await imageDoc.save();
                     imageDocs.push(imageDoc._id);
                 }
@@ -131,7 +165,9 @@ class ProductController {
                 await product.save();
             }
 
-            const updatedProduct = await Product.findById(product._id).populate('images').exec();
+            const updatedProduct = await Product.findById(product._id).exec();
+            const images = await ProductImage.find({ product: updatedProduct._id }).exec();
+            updatedProduct.images = images;
 
             res.json(updatedProduct);
         } catch (error) {
@@ -145,7 +181,7 @@ class ProductController {
             const product = await Product.findById(req.params.id);
             if (!product) return next(ApiError.badRequest('Товар не найден'));
 
-            await ProductImage.deleteMany({ productId: product._id });
+            await ProductImage.deleteMany({ product: product._id });
             await product.remove();
 
             res.json({ message: 'Товар удален' });

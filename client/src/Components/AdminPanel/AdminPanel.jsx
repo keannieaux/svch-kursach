@@ -119,7 +119,7 @@ const AdminPanel = () => {
 
     const columns = ["Order ID", "Product Name", "Quantity", "Price"];
     const rows = orders.map(order => {
-      console.log("Order data:", order); // Логирование данных заказа
+      console.log("Order data:", order);
       return order.items.map(item => [
         order.id,
         item.productName,

@@ -12,8 +12,18 @@ const UserList = () => {
     dispatch(getAllUsers());
   }, [dispatch]);
 
+  useEffect(() => {
+    if (users && users.rows) {
+      const initialRoles = {};
+      users.rows.forEach(user => {
+        initialRoles[user.id] = user.role._id || user.role; // Обеспечим использование правильного идентификатора роли
+      });
+      setSelectedRole(initialRoles);
+    }
+  }, [users]);
+
   const handleChangeRole = (userId) => {
-    dispatch(updateUserRole({ userId, roleId: selectedRole[userId] }));
+    dispatch(updateUserRole({ userId, roleId: String(selectedRole[userId]) })); // Преобразуем roleId в строку
   };
 
   const handleRoleChange = (userId, roleId) => {
@@ -52,7 +62,7 @@ const UserList = () => {
                 <td data-label="Last Name">{user.lastname}</td>
                 <td data-label="Role">
                   <select
-                    value={selectedRole[user.id] || user.roleId}
+                    value={selectedRole[user.id] || user.role}
                     onChange={(e) => handleRoleChange(user.id, e.target.value)}
                   >
                     <option value="1">Customer</option>

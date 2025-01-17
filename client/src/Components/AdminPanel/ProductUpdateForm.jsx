@@ -22,7 +22,7 @@ const ProductUpdateForm = ({ product }) => {
       setPrice(product.price || '');
       setStock(product.stock || '');
       setSize(product.size ? product.size.join(',') : '');
-      setCategoryId(product.categoryId || '');
+      setCategoryId(product.category || ''); // Изменено
     }
   }, [product]);
 
@@ -40,7 +40,7 @@ const ProductUpdateForm = ({ product }) => {
     formData.append('price', price);
     formData.append('stock', stock);
     formData.append('size', size);
-    formData.append('categoryId', categoryId);
+    formData.append('category', categoryId); // Изменено
     newImages.forEach((image) => {
       formData.append('images', image);
     });
@@ -48,7 +48,7 @@ const ProductUpdateForm = ({ product }) => {
     console.log('Form Data:', formData);
 
     if (product) {
-      dispatch(updateProduct({ _id: product.id, productData: formData }));
+      dispatch(updateProduct({ _id: product._id, productData: formData })); // Изменено
     }
   };
 
@@ -95,7 +95,8 @@ const ProductUpdateForm = ({ product }) => {
             <CategorySelect selectedCategory={categoryId} onSelectCategory={setCategoryId} />
             <input type="file" multiple onChange={handleImageChange} />
             <button type="submit" disabled={isLoading}>Обновить продукт</button>
-            {success && <p className="success">Продукт успешно обновлен!</p>} {/* Сообщение об успешном обновлении */}
+            {success && <p className="success">Продукт успешно обновлен!</p>}
+            {error && <p className="error">Ошибка при обновлении продукта: {error}</p>} {/* Добавлено отображение ошибки */}
           </form>
         </>
       ) : (

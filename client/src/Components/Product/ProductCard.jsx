@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './ProductCard.css';
 import { useNavigate } from 'react-router-dom';
-import imagick from '../../img/Group.png'
+import imagick from '../../img/Group.png';
 
 const ProductCard = ({ _id, name, price, colors = [], images = [] }) => {
   const navigate = useNavigate();
@@ -23,20 +23,20 @@ const ProductCard = ({ _id, name, price, colors = [], images = [] }) => {
 
   return (
     <div className='gapicki'>
-          {imageUrl ? (
-      <img src={imageUrl} alt={name} className="product-image1" onError={() => console.error("Error loading image")} />
-    ) : (
-      <div className="placeholder-image1"></div>
-    )}
-    <div className="product-card1" onClick={handleClick}>
-      <div className="product-info1">
-        <h3 className="product-name1">{name}</h3>
-        <div className='colorplusprice'>
-        <img src={imagick} alt={name} className="productimg" onError={() => console.error("Error loading image")} />
-        <p className="product-price1">${formattedPrice}</p>
+      {imageUrl ? (
+        <img src={imageUrl} alt={name} className="product-image1" onError={() => console.error("Error loading image")} />
+      ) : (
+        <div className="placeholder-image1"></div>
+      )}
+      <div className="product-card1" onClick={handleClick}>
+        <div className="product-info1">
+          <h3 className="product-name1">{name}</h3>
+          <div className='colorplusprice'>
+            <img src={imagick} alt={name} className="productimg" onError={() => console.error("Error loading image")} />
+            <p className="product-price1">${formattedPrice}</p>
+          </div>
         </div>
       </div>
-    </div>
     </div>
   );
 };

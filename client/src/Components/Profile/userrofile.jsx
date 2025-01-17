@@ -20,8 +20,8 @@ const UserProfile = () => {
   const [phoneError, setPhoneError] = useState(null);
 
   // Обновленные идентификаторы ролей
-  const CUSTOMER_ROLE_ID = '6789df578f836b8220e12936'; // ID роли "customer"
-    const ADMIN_ROLE_ID = '6789df628f836b8220e12939';     // ID роли "ADMIN"
+  const CUSTOMER_ROLE_ID = '6789e5869a7f547a8799f2ae'; // ID роли "customer"
+  const ADMIN_ROLE_ID = '6789e5949a7f547a8799f2b1';    // ID роли "ADMIN"
 
   const handleLogout = () => {
     dispatch(logout());
@@ -48,8 +48,14 @@ const UserProfile = () => {
     const userData = { [field]: value };
     console.log(`Updating ${field} with value:`, userData);
 
+    // Убедитесь, что user._id существует и не равен undefined
+    if (!user.id) {
+        console.error('User ID is undefined');
+        return;
+    }
+
     dispatch(updateUser({
-      userId: user._id,
+      userId: user.id,
       userData
     }))
     .unwrap()

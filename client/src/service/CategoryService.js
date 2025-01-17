@@ -15,25 +15,18 @@ export default class CategoryService {
         return response.data;
     }
 
-        static async getAllCategories() {
-            const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ALL);
-            console.log('Категории из сервиса:', response.data); // Логируем полученные данные
-            return response.data;
-        }
-    
+    static async getAllCategories() {
+        const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ALL);
+        console.log('Категории из сервиса:', response.data); // Логируем полученные данные
+        return response.data;
+    }
 
     static async getCategoryById(_id) {
         const response = await $api.get(API_ENDPOINTS.CATEGORY.GET_ONE(_id));
         return response.data;
     }
 
-    static async updateCategory(_id, name, image) {
-        const formData = new FormData();
-        formData.append('name', name);
-        if (image) {
-            formData.append('image', image);
-        }
-
+    static async updateCategory(_id, formData) {
         const response = await $api.put(API_ENDPOINTS.CATEGORY.UPDATE(_id), formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',

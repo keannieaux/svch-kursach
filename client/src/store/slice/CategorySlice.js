@@ -29,9 +29,9 @@ export const getCategoryById = createAsyncThunk('category/getById', async (_id, 
     }
 });
 
-export const updateCategory = createAsyncThunk('category/update', async ({ _id, name, image }, { rejectWithValue }) => {
+export const updateCategory = createAsyncThunk('category/update', async ({ _id, formData }, { rejectWithValue }) => {
     try {
-        const response = await CategoryService.updateCategory(_id, name, image);
+        const response = await CategoryService.updateCategory(_id, formData);
         return response;
     } catch (error) {
         return rejectWithValue(error.response?.data?.message || "Ошибка при обновлении категории");

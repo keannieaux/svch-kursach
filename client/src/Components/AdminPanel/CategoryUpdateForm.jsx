@@ -23,7 +23,12 @@ const CategoryUpdateForm = ({ categoryId, onClose }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateCategory({ _id: categoryId, name, image }));
+    const formData = new FormData();
+    formData.append('name', name);
+    if (image) {
+      formData.append('image', image);
+    }
+    dispatch(updateCategory({ _id: categoryId, formData }));
     onClose();
   };
 

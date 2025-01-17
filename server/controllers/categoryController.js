@@ -38,7 +38,7 @@ class CategoryController {
             res.json(categories);
         } catch (error) {
             console.error('Ошибка при выборке категорий:', error);
-            next(ApiError.internal('Ошибка при выборке категорий'));
+            next(ApiError.internal('Ошибка при выборке категорий: ' + error.message));
         }
     }
 
@@ -51,7 +51,7 @@ class CategoryController {
             res.json(category);
         } catch (error) {
             console.error('Ошибка при выборке категории:', error);
-            next(ApiError.internal('Ошибка при выборке категории'));
+            next(ApiError.internal('Ошибка при выборке категории: ' + error.message));
         }
     }
 
